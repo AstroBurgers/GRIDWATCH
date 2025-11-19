@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Rage;
-
-namespace GRIDWATCH.Utils;
+﻿namespace GRIDWATCH.Utils;
 
 public class GameFiberHandling
 {

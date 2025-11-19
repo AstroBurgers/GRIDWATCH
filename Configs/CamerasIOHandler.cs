@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
-using Rage;
-using static GRIDWATCH.Utils.Logger;
+﻿using Newtonsoft.Json;
 
 namespace GRIDWATCH.Configs;
 
