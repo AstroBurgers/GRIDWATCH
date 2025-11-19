@@ -20,6 +20,8 @@ public class Main : Plugin
         {
             GameFiber.StartNew(() =>
             {
+                Normal("Adding console commands...");
+                Game.AddConsoleCommands();
                 Game.DisplayNotification("GRIDWATCH Loaded Successfully!");
             });
         }

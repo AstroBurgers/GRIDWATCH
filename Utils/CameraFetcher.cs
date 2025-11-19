@@ -1,32 +1,51 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using GRIDWATCH.Configs;
-using static GRIDWATCH.Configs.CamerasIoHandler;
-using static GRIDWATCH.Utils.GlobalVars;
-
-namespace GRIDWATCH.Utils;
+using Rage.Attributes;
 
 public class CameraFetcher
 {
-    internal static List<string> CameraProps = new()
+    internal static readonly List<uint> CameraProps = new()
     {
-        "prop_traffic_01a",
-        "prop_traffic_01d",
-        "prop_traffic_03a",
-        "prop_traffic_02b",
-        "prop_traffic_01b"
+        Game.GetHashKey("prop_traffic_01a"),
+        Game.GetHashKey("prop_traffic_01d"),
+        Game.GetHashKey("prop_traffic_03a"),
+        Game.GetHashKey("prop_traffic_02b"),
+        Game.GetHashKey("prop_traffic_01b")
     };
-    
+
+    [ConsoleCommand("**DEVELOPMENT ONLY! DO NOT USE**")]
     internal static void FetchAndPrintAllCameras()
     {
-        var WorldCameras = World.GetAllEntities().Where(i => i.Model.IsValid && CameraProps.Contains(i.Model.Name)).ToList();
+        Warn("⚠️ Running camera fetcher! Expect temporary lag.");
+        var sw = Stopwatch.StartNew();
 
-        for (int i = 0; i < WorldCameras.Count; i++)
+        try
         {
-            var cameraData = new CameraData(id:i, new Position(WorldCameras[i].Position.X, WorldCameras[i].Position.Y,
-                WorldCameras[i].Position.Z));
-            Cameras.Add(cameraData);
+            var worldCameras = World.GetAllEntities()
+                .Where(e => e.Model.IsValid && CameraProps.Contains(e.Model.Hash))
+                .ToList();
+
+            var newList = new List<CameraData>(worldCameras.Count);
+            for (int i = 0; i < worldCameras.Count; i++)
+            {
+                var pos = worldCameras[i].Position;
+                newList.Add(new CameraData(
+                    id: i,
+                    new Position(pos.X, pos.Y, pos.Z)
+                ));
+            }
+
+            CamerasIoHandler.WriteJson(newList);
+            Info($"Fetched and wrote {newList.Count} cameras in {sw.ElapsedMilliseconds}ms.");
         }
-        
-        WriteJson(Cameras);
+        catch (Exception ex)
+        {
+            Warn($"Camera fetch failed: {ex.Message}");
+        }
+        finally
+        {
+            sw.Stop();
+        }
     }
 }

@@ -59,7 +59,6 @@
     <ItemGroup>
         <Compile Include="Configs\CamerasIOHandler.cs" />
         <Compile Include="Configs\Settings.cs" />
-        <Compile Include="ConsoleCommands.cs" />
         <Compile Include="GlobalUsings.cs" />
         <Compile Include="Main.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
