@@ -20,7 +20,7 @@ public class CameraFetcher
     {
         var WorldCameras = World.GetAllEntities().Where(i => i.Model.IsValid && CameraProps.Contains(i.Model.Name)).ToList();
 
-        for (int i = 0; i < WorldCameras.Count(); i++)
+        for (int i = 0; i < WorldCameras.Count; i++)
         {
             var cameraData = new CameraData(id:i, new Position(WorldCameras[i].Position.X, WorldCameras[i].Position.Y,
                 WorldCameras[i].Position.Z));
