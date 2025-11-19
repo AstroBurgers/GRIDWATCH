@@ -1,7 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿namespace GRIDWATCH.Configs;
 
-namespace GRIDWATCH.Configs;
-
+/*
 public static class CamerasIoHandler
 {
     private static readonly string FilePath =
@@ -139,7 +138,7 @@ public static class CamerasIoHandler
             Warn($"I/O error while appending cameras.json: {e.Message}");
         }
     }
-}
+}*/
 
 public class CameraData
 {

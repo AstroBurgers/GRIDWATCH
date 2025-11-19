@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Linq;
-using GRIDWATCH.Configs;
-using Rage.Attributes;
+﻿using GRIDWATCH.Configs;
 
 public class CameraFetcher
 {
@@ -14,38 +11,27 @@ public class CameraFetcher
         Game.GetHashKey("prop_traffic_01b")
     };
 
-    [ConsoleCommand("**DEVELOPMENT ONLY! DO NOT USE**")]
-    internal static void FetchAndPrintAllCameras()
+    internal static List<CameraData> FetchNearbyCameras()
     {
-        Warn("⚠️ Running camera fetcher! Expect temporary lag.");
-        var sw = Stopwatch.StartNew();
-
         try
         {
-            var worldCameras = World.GetAllEntities()
-                .Where(e => e.Model.IsValid && CameraProps.Contains(e.Model.Hash))
+            var playerPos = MainPlayer.Position;
+            var worldCameras = World.GetAllObjects()
+                .Where(p => CameraProps.Contains(p.Model.Hash)
+                            && p.Position.DistanceTo(playerPos) < 200f)
                 .ToList();
 
             var newList = new List<CameraData>(worldCameras.Count);
-            for (int i = 0; i < worldCameras.Count; i++)
-            {
-                var pos = worldCameras[i].Position;
-                newList.Add(new CameraData(
-                    id: i,
-                    new Position(pos.X, pos.Y, pos.Z)
-                ));
-            }
+            newList.AddRange(worldCameras.Select(t => t.Position).Select((pos, i) => new CameraData(id: i, new Position(pos.X, pos.Y, pos.Z))));
 
-            CamerasIoHandler.WriteJson(newList);
-            Info($"Fetched and wrote {newList.Count} cameras in {sw.ElapsedMilliseconds}ms.");
+            Debug($"Fetched {newList.Count} cameras");
+            return newList;
         }
         catch (Exception ex)
         {
-            Warn($"Camera fetch failed: {ex.Message}");
+            Error(ex);
         }
-        finally
-        {
-            sw.Stop();
-        }
+
+        return null;
     }
 }

@@ -1,7 +1,5 @@
 ﻿// IniReflector made by MarcelWRLD/Sprayxe, source code: https://github.com/Sprayxe/IniReflector
 
-using System.Linq;
-
 namespace GRIDWATCH.Utils;
 
 internal class IniReflector<T> : IniReflector
