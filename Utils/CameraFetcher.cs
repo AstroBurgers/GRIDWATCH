@@ -11,21 +11,18 @@ public class CameraFetcher
         Game.GetHashKey("prop_traffic_01b")
     };
 
-    internal static List<CameraData> FetchNearbyCameras()
+    internal static List<Entity> FetchNearbyCameras()
     {
         try
         {
             var playerPos = MainPlayer.Position;
-            var worldCameras = World.GetAllObjects()
+            var worldCameras = World.GetAllEntities()
                 .Where(p => CameraProps.Contains(p.Model.Hash)
                             && p.Position.DistanceTo(playerPos) < 200f)
                 .ToList();
 
-            var newList = new List<CameraData>(worldCameras.Count);
-            newList.AddRange(worldCameras.Select(t => t.Position).Select((pos, i) => new CameraData(id: i, new Position(pos.X, pos.Y, pos.Z))));
-
-            Debug($"Fetched {newList.Count} cameras");
-            return newList;
+            Debug($"Fetched {worldCameras.Count} cameras");
+            return worldCameras;
         }
         catch (Exception ex)
         {

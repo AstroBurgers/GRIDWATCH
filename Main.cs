@@ -1,4 +1,5 @@
 using LSPD_First_Response.Mod.API;
+using GRIDWATCH.CameraHandlers;
 
 namespace GRIDWATCH;
 
@@ -21,6 +22,7 @@ public class Main : Plugin
             {
                 Normal("Adding console commands...");
                 Game.AddConsoleCommands();
+                ScanManager.ScanProcess();
                 Game.DisplayNotification("GRIDWATCH Loaded Successfully!");
             });
         }
@@ -28,6 +30,6 @@ public class Main : Plugin
 
     public override void Finally()
     {
-            
+        ScanManager.TerminateScanManager();
     }
 }

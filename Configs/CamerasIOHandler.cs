@@ -143,33 +143,15 @@ public static class CamerasIoHandler
 public class CameraData
 {
     public int Id { get; set; }
-    public Position Position { get; set; }
+    public Vector3 Position { get; set; }
 
     public CameraData()
     {
     }
 
-    public CameraData(int id, Position position)
+    public CameraData(int id, Vector3 position)
     {
         Id = id;
         Position = position;
-    }
-}
-
-public class Position
-{
-    public float X { get; set; }
-    public float Y { get; set; }
-    public float Z { get; set; }
-
-    public Position()
-    {
-    }
-
-    public Position(float x, float y, float z)
-    {
-        X = x;
-        Y = y;
-        Z = z;
     }
 }
