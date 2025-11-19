@@ -2,7 +2,7 @@
 
 namespace GRIDWATCH.Configs;
 
-public static class CamerasIOHandler
+public static class CamerasIoHandler
 {
     private static readonly string FilePath =
         @"plugins\LSPDFR\GRIDWATCH\cameras.json";
@@ -17,7 +17,7 @@ public static class CamerasIOHandler
             NotifyFilter = NotifyFilters.LastWrite
         };
 
-        _watcher.Changed += (s, e) =>
+        _watcher.Changed += (_, _) =>
         {
             GameFiber.StartNew(() =>
             {
@@ -32,7 +32,7 @@ public static class CamerasIOHandler
 
         Info("Camera hot-reload watcher enabled.");
     }
-    
+
     public static List<CameraData> Cameras { get; private set; } = new();
 
     internal static bool DoesJsonFileExist(string filename)
@@ -83,13 +83,78 @@ public static class CamerasIOHandler
             Warn($"I/O error while reading cameras.json: {e.Message}");
         }
     }
+
+    internal static void WriteJson(List<CameraData> cameras)
+    {
+        try
+        {
+            var json = JsonConvert.SerializeObject(
+                cameras,
+                Formatting.Indented // keeps it readable
+            );
+
+            File.WriteAllText(FilePath, json);
+            Info($"Wrote {cameras.Count} camera(s) to cameras.json successfully.");
+        }
+        catch (JsonException e)
+        {
+            Warn($"Failed to serialize cameras.json: {e.Message}");
+        }
+        catch (IOException e)
+        {
+            Warn($"I/O error while writing cameras.json: {e.Message}");
+        }
+    }
+
+    internal static void AppendCamera(CameraData newCamera)
+    {
+        try
+        {
+            List<CameraData> current = new();
+
+            if (DoesJsonFileExist("cameras.json"))
+            {
+                var json = File.ReadAllText(FilePath);
+                var data = JsonConvert.DeserializeObject<List<CameraData>>(json);
+                if (data != null)
+                    current = data;
+            }
+
+            current.Add(newCamera);
+
+            var updatedJson = JsonConvert.SerializeObject(
+                current,
+                Formatting.Indented
+            );
+
+            File.WriteAllText(FilePath, updatedJson);
+            Info($"Appended camera (ID: {newCamera.Id}) – total {current.Count} camera(s) now.");
+        }
+        catch (JsonException e)
+        {
+            Warn($"Failed to append to cameras.json: {e.Message}");
+        }
+        catch (IOException e)
+        {
+            Warn($"I/O error while appending cameras.json: {e.Message}");
+        }
+    }
 }
 
 public class CameraData
 {
     public int Id { get; set; }
-    public string Name { get; set; }
     public Position Position { get; set; }
+
+    public CameraData()
+    {
+    }
+
+    public CameraData(int id, Position position)
+    {
+        Id = id;
+        Position = position;
+    }
 }
 
 public class Position
@@ -97,4 +162,15 @@ public class Position
     public float X { get; set; }
     public float Y { get; set; }
     public float Z { get; set; }
+
+    public Position()
+    {
+    }
+
+    public Position(float x, float y, float z)
+    {
+        X = x;
+        Y = y;
+        Z = z;
+    }
 }
