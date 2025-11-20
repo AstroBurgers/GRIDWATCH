@@ -14,16 +14,13 @@ internal static class CameraFetcher
     {
         try
         {
-            var playerPos = MainPlayer.Position;
-
             var worldCameras = World.GetAllEntities()
-                .Where(p => CameraProps.Contains(p.Model.Hash)
-                            && p.Position.DistanceTo(playerPos) < 200f)
+                .Where(p => CameraProps.Contains(p.Model.Hash))
                 .ToList();
 
             Debug($"Fetched {worldCameras.Count} cameras");
 
-            // Randomize and pick up to 5
+            // Randomize and pick up to the user configured max number of cameras
             var randomCameras = worldCameras
                 .OrderBy(_ => Rndm.Next())
                 .Take(Settings.UserConfig.MaxCamerasPerScan)

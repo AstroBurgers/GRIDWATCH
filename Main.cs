@@ -6,10 +6,16 @@ using LSPD_First_Response.Mod.API;
 
 namespace GRIDWATCH;
 
+/// <summary>
+/// Main plugin class for GRIDWATCH.
+/// </summary>
 public class Main : Plugin
 {
     internal static bool OnDuty;
 
+    /// <summary>
+    /// LSPD First Response calls this method when the plugin is initialized.
+    /// </summary>
     public override void Initialize()
     {
         Normal("Plugin initialized, go on duty to fully load plugin.");
@@ -42,6 +48,9 @@ public class Main : Plugin
         Normal("Unloaded successfully");
     }
     
+    /// <summary>
+    /// LSPD First Response calls this method when the plugin is unloaded.
+    /// </summary>
     public override void Finally()
     {
         ScanManager.TerminateScanManager();
