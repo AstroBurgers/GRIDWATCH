@@ -11,7 +11,7 @@ public class Main : Plugin
 
     public override void Initialize()
     {
-        // Normal("Plugin initialized, go on duty to fully load plugin.");
+        Normal("Plugin initialized, go on duty to fully load plugin.");
         Functions.OnOnDutyStateChanged += Functions_OnDutyStateChanged;
     }
 
@@ -25,8 +25,8 @@ public class Main : Plugin
                 Normal("Adding console commands...");
                 Game.AddConsoleCommands();
                 Settings.IniFileSetup();
-                ScanManager.ScanProcess();
-                Game.DisplayNotification("GRIDWATCH Loaded Successfully!");
+                GameFiberHandling.ActiveGameFibers.Add(GameFiber.StartNew(ScanManager.ScanProcess));
+                SharedMethods.DisplayGridwatchAlert("GRIDWATCH", "Plugin loaded ~g~successfully~s~, scanning activated!");
                 AppDomain.CurrentDomain.DomainUnload += Cleanup;
             });
         }

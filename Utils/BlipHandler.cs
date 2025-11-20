@@ -6,15 +6,20 @@ internal static class BlipHandler
 
     internal static void CleanupBlips()
     {
-        GameFiber.StartNew(() =>
+        Debug("Cleaning up active blips...");
+
+        foreach (var blip in ActiveBlips.Where(b => b.Exists()).ToList())
         {
-            Debug("Cleaning up running GameFibers...");
-            ActiveBlips.RemoveWhere(blip =>
+            try
             {
-                if (!blip.Exists()) return false;
                 blip.Delete();
-                return true;
-            });
-        });
+            }
+            catch (Exception ex)
+            {
+                Debug($"Exception deleting blip: {ex.Message}");
+            }
+        }
+
+        ActiveBlips.Clear();
     }
 }

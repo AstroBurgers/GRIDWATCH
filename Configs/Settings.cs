@@ -15,7 +15,7 @@ internal static class Settings
         {
             File.Create("plugins/LSPDFR/GRIDWATCH.ini").Close();
         }
-        
+
         IniReflector.Read(UserConfig, true);
         ValidateIniValues();
     }
@@ -29,16 +29,23 @@ internal static class Settings
             "Chance value is ~r~over 100~w~!!");
         Warn("Chance value set to 100");
     }
-
-
 }
 
 internal class Config
 {
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 85, name: "Read-Chance", description: "Chance that a LPR scan is successful (Default 85)")]
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 85, name: "Read-Chance",
+        description: "Chance that a LPR scan is successful (Default 85)")]
     public int ReadChance;
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 1500, name: "Scan-Interval", description: "How frequent cameras are polled in MS (Default 1500)")]
+
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 1500, name: "Scan-Interval",
+        description: "How frequent cameras are polled in MS (Default 1500)")]
     public int ScanInterval;
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 1500, name: "Max-Cameras-Per-Scan", description: "The maximum number of cameras to process per scan cycle (Default 5)")]
+
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 1500, name: "Max-Cameras-Per-Scan",
+        description: "The maximum number of cameras to process per scan cycle (Default 5)")]
     public int MaxCamerasPerScan;
+
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: false, name: "Enable-Debug-Mode",
+        description: "Enable debug mode for more verbose logging (Default false)")]
+    public bool DebugModeEnabled;
 }

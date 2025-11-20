@@ -57,18 +57,41 @@ internal static class ScanManager
     {
         var vehData = vehicle.GetVehicleData();
         if (vehData == null) return;
-        var stolenStatus = vehData.IsStolen ? " ~r~[STOLEN]~s~" : "";
-        var boloStatus = vehData.HasAnyBOLOs ? " ~o~[BOLO]~s~" : "";
-        var wantedStatus = vehData.Owner.Wanted ? " ~r~[WANTED]~s~" : "";
 
-        if (string.IsNullOrEmpty(stolenStatus) && string.IsNullOrEmpty(boloStatus) &&
-            string.IsNullOrEmpty(wantedStatus)) return;
+        static string FormatFlag(bool condition, string text, string color)
+            => condition ? $"{color}[{text}]~s~ " : string.Empty;
 
-        Game.DisplayNotification("3dtextures",
-            "mpgroundlogo_cops",
-            "GRIDWATCH Alert",
-            "~b~License Plate Hit",
-            $"Camera Area: ~b~{LSPD_First_Response.Mod.API.Functions.GetZoneAtPosition(camera.Position).RealAreaName}\nPlate: ~y~{vehicle.LicensePlate}~s~\nModel: ~y~{vehicle.Model.Name}~s~\nColor: ~y~{vehData.PrimaryColor} / {vehData.SecondaryColor}~s~\nFlags: ~y~{stolenStatus} {boloStatus} {wantedStatus}~s~"
+        string stolen = FormatFlag(vehData.IsStolen, "STOLEN", "~r~");
+        string bolo = FormatFlag(vehData.HasAnyBOLOs, "BOLO", "~o~");
+        string wanted = FormatFlag(vehData.Owner.Wanted, "WANTED", "~b~");
+
+        // Skip if there are literally no flags of interest
+        if (string.IsNullOrWhiteSpace(stolen + bolo + wanted)) return;
+
+        // Gather zone / vehicle info safely
+        var zone =
+            LSPD_First_Response.Mod.API.Functions.GetZoneAtPosition(camera.Position)
+                ?.RealAreaName ?? "Unknown";
+        var make = GetMakeNameFromVehicleModel(Game.GetHashKey(vehicle.Model.Name));
+        var model = vehicle.Model.Name ?? "N/A";
+        var plate = vehicle.LicensePlate ?? "UNREADABLE";
+        var primary = vehData.PrimaryColor ?? "UNK";
+        var secondary = vehData.SecondaryColor ?? "UNK";
+
+        string colors = primary == secondary
+            ? $"~y~{primary}~s~"
+            : $"~y~{primary}~s~ / ~y~{secondary}~s~";
+
+        string message =
+            $"~b~Camera Zone:~s~ {zone}\n" +
+            $"~b~License Plate:~s~ ~y~{plate}~s~\n" +
+            $"~b~Vehicle:~s~ ~y~{make} {model}~s~\n" +
+            $"~b~Color:~s~ {colors}\n" +
+            $"~b~Flags:~s~ {stolen}{bolo}{wanted}";
+
+        SharedMethods.DisplayGridwatchAlert(
+            type: "VEHICLE SCAN TRIGGERED",
+            message: message
         );
 
         GameFiberHandling.ActiveGameFibers.Add(
@@ -78,18 +101,22 @@ internal static class ScanManager
                     {
                         Color = System.Drawing.Color.Red,
                         Alpha = 0.5f,
-                        Name = $"GRIDWATCH Alert: {vehicle.LicensePlate}"
+                        Name = $"GRIDWATCH Alert: {plate}"
                     };
+
                     blip.Flash(500, 30000);
                     BlipHandler.ActiveBlips.Add(blip);
+
                     GameFiber.Wait(30000);
+
                     BlipHandler.ActiveBlips.Remove(blip);
-                    blip.Delete();
-                }, $"GRIDWATCH Blip Thread {vehicle.LicensePlate}")
+                    blip?.Delete();
+                },
+                $"GRIDWATCH Blip Thread {plate}")
         );
     }
 
-    internal static void ScannedVehiclesCleanup()
+    private static void ScannedVehiclesCleanup()
     {
         var toRemove = (from kvp in _scannedVehicles where !kvp.Key.Exists() || !kvp.Key.IsDriveable select kvp.Key)
             .ToList();
