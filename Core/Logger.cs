@@ -36,6 +36,7 @@ internal static class Logger
 
     internal static void Debug(string msg)
     {
+        if (!UserConfig.DebugModeEnabled) return;
         Game.LogTrivial($"[DEBUG] GRIDWATCH: {msg}");
     }
 
