@@ -1,3 +1,4 @@
+using GRIDWATCH.Core.EventBus;
 using GRIDWATCH.Features.Cameras;
 using GRIDWATCH.Features.Shotspotter;
 using LSPD_First_Response.Mod.API;
@@ -20,22 +21,36 @@ public class Main : Plugin
         Functions.OnOnDutyStateChanged += Functions_OnDutyStateChanged;
     }
 
+
     private static void Functions_OnDutyStateChanged(bool onDuty)
     {
         OnDuty = onDuty;
-        if (onDuty)
+
+        if (!onDuty)
+            return;
+
+        GameFiber.StartNew(() =>
         {
-            GameFiber.StartNew(() =>
-            {
-                Normal("Adding console commands...");
-                Game.AddConsoleCommands();
-                IniFileSetup();
-                GameFiberHandling.ActiveGameFibers.Add(GameFiber.StartNew(ScanManager.ScanProcess));
-                GameFiberHandling.ActiveGameFibers.Add(GameFiber.StartNew(SpawnProcess.Start));
-                SharedMethods.DisplayGridwatchAlert("GRIDWATCH", "Plugin loaded ~g~successfully~s~, scanning activated!");
-                AppDomain.CurrentDomain.DomainUnload += Cleanup;
-            });
-        }
+            Normal("Adding console commands...");
+            Game.AddConsoleCommands();
+
+            IniFileSetup();
+
+            EventConsumers.Initialize();
+
+            SensorScheduler.Register(new ScanManager());
+            //SensorScheduler.Register(new ShotspotterSensor()); // hypothetical gunfire system
+
+            GameFiberHandling.ActiveGameFibers.Add(GameFiber.StartNew(SensorScheduler.Run));
+            GameFiberHandling.ActiveGameFibers.Add(GameFiber.StartNew(SpawnProcess.Start));
+
+            SharedMethods.DisplayGridwatchAlert(
+                "GRIDWATCH",
+                "Plugin loaded ~g~successfully~s~, scanning activated!"
+            );
+
+            AppDomain.CurrentDomain.DomainUnload += Cleanup;
+        });
     }
 
     /// <summary>
@@ -44,7 +59,7 @@ public class Main : Plugin
     /// </summary>
     private static void Cleanup(object sender, EventArgs e)
     {
-        ScanManager.TerminateScanManager();
+        ScanManager.Cleanup();
         BlipHandler.CleanupBlips();
         GameFiberHandling.CleanupFibers();
 

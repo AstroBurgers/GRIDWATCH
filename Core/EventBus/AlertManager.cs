@@ -1,7 +1,7 @@
 ﻿using GRIDWATCH.Features.Cameras;
 using GRIDWATCH.Features.Shotspotter;
 
-namespace GRIDWATCH.Features.SharedSystems;
+namespace GRIDWATCH.Core.EventBus;
 
 internal static class AlertManager
 {

@@ -1,4 +1,4 @@
-﻿namespace GRIDWATCH.Features.SharedSystems;
+﻿namespace GRIDWATCH.Core.EventBus;
 
 internal static class EventHub
 {

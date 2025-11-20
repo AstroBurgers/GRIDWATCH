@@ -1,4 +1,5 @@
 ﻿using CommonDataFramework.Modules.VehicleDatabase;
+using GRIDWATCH.Core.EventBus;
 using GRIDWATCH.Features.SharedSystems;
 using static GRIDWATCH.Features.Alerts.SharedMethods;
 
@@ -6,7 +7,7 @@ namespace GRIDWATCH.Features.Cameras;
 
 internal class ScanManager : ISensor
 {
-    private readonly Dictionary<Vehicle, uint> _scannedVehicles = new();
+    private static readonly Dictionary<Vehicle, uint> _scannedVehicles = new();
 
     public void Tick(IEnumerable<Entity> cameras)
     {
@@ -30,11 +31,9 @@ internal class ScanManager : ISensor
                 _scannedVehicles[veh] = Game.GameTime;
             }
         }
-
-        Cleanup();
     }
 
-    private void Cleanup()
+    internal static void Cleanup()
     {
         var toRemove = _scannedVehicles.Keys
             .Where(v => !v.Exists() || !v.IsDriveable)

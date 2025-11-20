@@ -1,4 +1,6 @@
-﻿namespace GRIDWATCH.Features.SharedSystems;
+﻿using GRIDWATCH.Features.SharedSystems;
+
+namespace GRIDWATCH.Core.EventBus;
 
 internal static class SensorScheduler
 {

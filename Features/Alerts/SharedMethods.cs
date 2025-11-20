@@ -1,4 +1,5 @@
 ﻿using CommonDataFramework.Modules.VehicleDatabase;
+using GRIDWATCH.Core.EventBus;
 using GRIDWATCH.Features.Cameras;
 using GRIDWATCH.Features.SharedSystems;
 
