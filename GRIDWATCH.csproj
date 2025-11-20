@@ -74,9 +74,6 @@
         <Compile Include="Utils\SharedMethods.cs" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="GRIDWATCH\cameras.json" />
-    </ItemGroup>
-    <ItemGroup>
       <None Include="packages.config" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>

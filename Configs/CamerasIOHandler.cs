@@ -1,4 +1,5 @@
-﻿/*namespace GRIDWATCH.Configs;
+﻿// UNUSED - kept for reference
+/*namespace GRIDWATCH.Configs;
 
 public static class CamerasIoHandler
 {
