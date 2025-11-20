@@ -8,8 +8,6 @@ namespace GRIDWATCH;
 /// </summary>
 public class Main : Plugin
 {
-    internal static bool OnDuty;
-
     /// <summary>
     /// LSPD First Response calls this method when the plugin is initialized.
     /// </summary>
@@ -21,7 +19,6 @@ public class Main : Plugin
 
     private static void Functions_OnDutyStateChanged(bool onDuty)
     {
-        OnDuty = onDuty;
         if (onDuty)
         {
             GameFiber.StartNew(() =>
