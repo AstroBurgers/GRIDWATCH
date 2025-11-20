@@ -17,6 +17,7 @@ internal static class Settings
         }
         
         IniReflector.Read(UserConfig, true);
+        ValidateIniValues();
     }
 
     private static void ValidateIniValues()

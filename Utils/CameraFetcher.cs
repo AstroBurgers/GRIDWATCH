@@ -4,11 +4,8 @@ public class CameraFetcher
 {
     internal static readonly List<uint> CameraProps = new()
     {
-        Game.GetHashKey("prop_traffic_01a"),
-        Game.GetHashKey("prop_traffic_01d"),
-        Game.GetHashKey("prop_traffic_03a"),
-        Game.GetHashKey("prop_traffic_02b"),
-        Game.GetHashKey("prop_traffic_01b")
+        0x3e2b73a4, 0x336e5e2a, 0xd8eba922, 0xd4729f50,
+        0x272244b2, 0x33986eae, 0x2323cdc5
     };
 
     internal static List<Entity> FetchNearbyCameras()
@@ -16,19 +13,26 @@ public class CameraFetcher
         try
         {
             var playerPos = MainPlayer.Position;
+
             var worldCameras = World.GetAllEntities()
                 .Where(p => CameraProps.Contains(p.Model.Hash)
                             && p.Position.DistanceTo(playerPos) < 200f)
                 .ToList();
 
             Debug($"Fetched {worldCameras.Count} cameras");
-            return worldCameras;
+
+            // Randomize and pick up to 5
+            var randomCameras = worldCameras
+                .OrderBy(_ => Rndm.Next())
+                .Take(5)
+                .ToList();
+
+            return randomCameras;
         }
         catch (Exception ex)
         {
             Error(ex);
+            return new List<Entity>();
         }
-
-        return null;
     }
 }

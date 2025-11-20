@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using CommonDataFramework.Modules.VehicleDatabase;
+using GRIDWATCH.Utils;
 using static GRIDWATCH.Utils.NativeWrapper;
 
 namespace GRIDWATCH.CameraHandlers;
@@ -27,22 +28,22 @@ internal static class ScanManager
                 foreach (var veh in vehicles)
                 {
                     if (!veh.Exists()) continue;
-                    
+
                     // avoid reprocessing already scanned vehicles
                     if (_scannedVehicles.ContainsKey(veh)) continue;
-                    
+
                     float distance = veh.DistanceTo(cam.Position);
-                    if (distance > 30f) continue;
+                    if (distance >= 50f) continue;
 
                     // Line of sight test
-                    /*if (!HasEntityClearLosToEntity(cam, veh))
-                        continue;*/
+                    if (!HasEntityClearLosToEntity(cam, veh))
+                        continue;
 
                     // Run plate scan
                     // e.g. ProcessPlate(cam, veh, distance);
                     Debug($"Scanned vehicle {veh.LicensePlate} at distance {distance} from camera.");
                     ProcessPlate(cam, veh);
-                    
+
                     _scannedVehicles.Add(veh, Game.GameTime);
                 }
             }
@@ -59,28 +60,40 @@ internal static class ScanManager
         var stolenStatus = vehData.IsStolen ? " ~r~[STOLEN]~s~" : "";
         var boloStatus = vehData.HasAnyBOLOs ? " ~o~[BOLO]~s~" : "";
         var wantedStatus = vehData.Owner.Wanted ? " ~r~[WANTED]~s~" : "";
-        
-        if (string.IsNullOrEmpty(stolenStatus) || string.IsNullOrEmpty(boloStatus) ||
+
+        if (string.IsNullOrEmpty(stolenStatus) && string.IsNullOrEmpty(boloStatus) &&
             string.IsNullOrEmpty(wantedStatus)) return;
-        
+
         Game.DisplayNotification("3dtextures",
             "mpgroundlogo_cops",
-            "GRIDWATCH",
-            "~b~License Plate Scanned",
-            $"Camera Area: {LSPD_First_Response.Mod.API.Functions.GetZoneAtPosition(camera.Position).RealAreaName}\nPlate: ~y~{vehicle.LicensePlate}~s~\nModel: ~y~{vehicle.Model.Name}\nColor: ~y~{vehData.PrimaryColor} / {vehData.SecondaryColor}\nFlags: ~y~{stolenStatus} {boloStatus} {wantedStatus}"
+            "GRIDWATCH Alert",
+            "~b~License Plate Hit",
+            $"Camera Area: ~b~{LSPD_First_Response.Mod.API.Functions.GetZoneAtPosition(camera.Position).RealAreaName}\nPlate: ~y~{vehicle.LicensePlate}~s~\nModel: ~y~{vehicle.Model.Name}~s~\nColor: ~y~{vehData.PrimaryColor} / {vehData.SecondaryColor}~s~\nFlags: ~y~{stolenStatus} {boloStatus} {wantedStatus}~s~"
+        );
+
+        GameFiberHandling.OutcomeGameFibers.Add(
+            GameFiber.StartNew(() =>
+                {
+                    var blip = new Blip(vehicle.Position, 50f);
+                    blip.Color = System.Drawing.Color.Red;
+                    blip.Alpha = 0.5f;
+                    blip.Name = $"GRIDWATCH Alert: {vehicle.LicensePlate}";
+                    blip.Flash(10, 30000);
+                }, $"GRIDWATCH Blip Thread {vehicle.LicensePlate}")
         );
     }
-    
+
     internal static void ScannedVehiclesCleanup()
     {
-        var toRemove = (from kvp in _scannedVehicles where !kvp.Key.Exists() || !kvp.Key.IsDriveable select kvp.Key).ToList();
+        var toRemove = (from kvp in _scannedVehicles where !kvp.Key.Exists() || !kvp.Key.IsDriveable select kvp.Key)
+            .ToList();
 
         foreach (var vehicle in toRemove)
         {
             _scannedVehicles.Remove(vehicle);
         }
     }
-    
+
     internal static void TerminateScanManager()
     {
         ScannedVehiclesCleanup();
