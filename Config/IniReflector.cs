@@ -1,6 +1,6 @@
 ﻿// IniReflector made by MarcelWRLD/Sprayxe, source code: https://github.com/Sprayxe/IniReflector
 
-namespace GRIDWATCH.Utils;
+namespace GRIDWATCH.Config;
 
 internal class IniReflector<T> : IniReflector
 {

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace GRIDWATCH.Utils;
+namespace GRIDWATCH.Core;
 
 internal static class Logger
 {

@@ -1,9 +1,10 @@
-﻿using System.Diagnostics;
-using CommonDataFramework.Modules.VehicleDatabase;
-using GRIDWATCH.Utils;
-using static GRIDWATCH.Utils.NativeWrapper;
+﻿using CommonDataFramework.Modules.VehicleDatabase;
+using GRIDWATCH.Config;
+using GRIDWATCH.Core;
+using GRIDWATCH.Features.Alerts;
+using static GRIDWATCH.Native.NativeWrapper;
 
-namespace GRIDWATCH.CameraHandlers;
+namespace GRIDWATCH.Features.Cameras;
 
 internal static class ScanManager
 {
@@ -11,16 +12,12 @@ internal static class ScanManager
 
     internal static void ScanProcess()
     {
-        var scanInterval = Configs.Settings.UserConfig.ScanInterval;
+        var scanInterval = Settings.UserConfig.ScanInterval;
 
         while (true)
         {
             GameFiber.Yield();
-
-            // Pre-fetch vehicles once per scan cycle
             var vehicles = World.GetAllVehicles();
-
-            // Grab nearby lights
             var cameras = CameraFetcher.FetchNearbyCameras();
 
             foreach (var cam in cameras)
@@ -29,18 +26,17 @@ internal static class ScanManager
                 {
                     if (!veh.Exists()) continue;
 
-                    // avoid reprocessing already scanned vehicles
                     if (_scannedVehicles.ContainsKey(veh)) continue;
 
                     float distance = veh.DistanceTo(cam.Position);
                     if (distance >= 50f) continue;
-
-                    // Line of sight test
+                    
                     if (!HasEntityClearLosToEntity(cam, veh))
                         continue;
-
-                    // Run plate scan
-                    // e.g. ProcessPlate(cam, veh, distance);
+                    
+                    if (!ShouldReadPlate(veh)) {
+                        return;
+                    }
                     Debug($"Scanned vehicle {veh.LicensePlate} at distance {distance} from camera.");
                     ProcessPlate(cam, veh);
 
@@ -116,6 +112,24 @@ internal static class ScanManager
         );
     }
 
+
+    private static bool ShouldReadPlate(Vehicle vehicle)
+    {
+        // base chance (user config 0–100)
+        float effectiveChance = Settings.UserConfig.ReadChance;
+
+        // Apply modifiers
+        effectiveChance *= IsWeatherInclement() ? 0.8f : 1.0f;
+        effectiveChance *= GetLightLevelModifier();
+        effectiveChance *= GetDirtModifier(vehicle);
+
+        // Clamp to 0–100
+        effectiveChance = MathHelper.Clamp(effectiveChance, 0f, 100f);
+
+        // Random roll 0–100
+        return Rndm.NextDouble() * 100 <= effectiveChance;
+    }
+    
     private static void ScannedVehiclesCleanup()
     {
         var toRemove = (from kvp in _scannedVehicles where !kvp.Key.Exists() || !kvp.Key.IsDriveable select kvp.Key)

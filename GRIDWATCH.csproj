@@ -58,20 +58,21 @@
         <Reference Include="System.Xml"/>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="CameraHandlers\ScanManager.cs" />
-        <Compile Include="Configs\CamerasIOHandler.cs" />
-        <Compile Include="Configs\Settings.cs" />
-        <Compile Include="GlobalUsings.cs" />
+        <Compile Include="Config\CamerasIOHandler.cs" />
+        <Compile Include="Config\IniReflector.cs" />
+        <Compile Include="Config\Settings.cs" />
+        <Compile Include="Core\GameFiberHandling.cs" />
+        <Compile Include="Core\GlobalUsings.cs" />
+        <Compile Include="Core\Logger.cs" />
+        <Compile Include="Features\Alerts\BlipHandler.cs" />
+        <Compile Include="Features\Alerts\SharedMethods.cs" />
+        <Compile Include="Features\Cameras\CameraFetcher.cs" />
+        <Compile Include="Features\Cameras\ScanManager.cs" />
         <Compile Include="Main.cs" />
+        <Compile Include="Native\Enums\WeatherType.cs" />
+        <Compile Include="Native\GlobalVars.cs" />
+        <Compile Include="Native\NativeWrapper.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
-        <Compile Include="Utils\BlipHandler.cs" />
-        <Compile Include="Utils\CameraFetcher.cs" />
-        <Compile Include="Utils\GameFiberHandling.cs" />
-        <Compile Include="Utils\GlobalVars.cs" />
-        <Compile Include="Utils\IniReflector.cs" />
-        <Compile Include="Utils\Logger.cs" />
-        <Compile Include="Utils\NativeWrapper.cs" />
-        <Compile Include="Utils\SharedMethods.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />

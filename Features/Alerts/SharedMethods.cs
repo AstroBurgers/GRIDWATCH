@@ -1,4 +1,4 @@
-﻿namespace GRIDWATCH.Utils;
+﻿namespace GRIDWATCH.Features.Alerts;
 
 internal static class SharedMethods
 {

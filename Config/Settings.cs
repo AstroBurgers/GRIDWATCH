@@ -1,8 +1,6 @@
-﻿using GRIDWATCH.Utils;
+﻿#pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
 
-#pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
-
-namespace GRIDWATCH.Configs;
+namespace GRIDWATCH.Config;
 
 internal static class Settings
 {

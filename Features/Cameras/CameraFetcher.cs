@@ -1,4 +1,6 @@
-﻿using GRIDWATCH.Configs;
+﻿using GRIDWATCH.Config;
+
+namespace GRIDWATCH.Features.Cameras;
 
 internal static class CameraFetcher
 {

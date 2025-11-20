@@ -1,6 +1,6 @@
-﻿namespace GRIDWATCH.Utils;
+﻿namespace GRIDWATCH.Core;
 
-public class GameFiberHandling
+internal static class GameFiberHandling
 {
     internal static readonly HashSet<GameFiber> ActiveGameFibers = [];
 

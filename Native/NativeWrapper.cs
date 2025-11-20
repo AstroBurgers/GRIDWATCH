@@ -1,6 +1,6 @@
 ﻿using Rage.Native;
 
-namespace GRIDWATCH.Utils;
+namespace GRIDWATCH.Native;
 
 internal static class NativeWrapper
 {
