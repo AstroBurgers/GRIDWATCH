@@ -28,7 +28,7 @@ internal static class ScanManager
 
                     if (_scannedVehicles.ContainsKey(veh)) continue;
 
-                    float distance = veh.DistanceTo(cam.Position);
+                    var distance = veh.DistanceTo(cam.Position);
                     if (distance >= 50f) continue;
                     
                     if (!HasEntityClearLosToEntity(cam, veh))
@@ -57,9 +57,9 @@ internal static class ScanManager
         static string FormatFlag(bool condition, string text, string color)
             => condition ? $"{color}[{text}]~s~ " : string.Empty;
 
-        string stolen = FormatFlag(vehData.IsStolen, "STOLEN", "~r~");
-        string bolo = FormatFlag(vehData.HasAnyBOLOs, "BOLO", "~o~");
-        string wanted = FormatFlag(vehData.Owner.Wanted, "WANTED", "~b~");
+        var stolen = FormatFlag(vehData.IsStolen, "STOLEN", "~r~");
+        var bolo = FormatFlag(vehData.HasAnyBOLOs, "BOLO", "~o~");
+        var wanted = FormatFlag(vehData.Owner.Wanted, "WANTED", "~b~");
 
         // Skip if there are literally no flags of interest
         if (string.IsNullOrWhiteSpace(stolen + bolo + wanted)) return;
@@ -74,11 +74,11 @@ internal static class ScanManager
         var primary = vehData.PrimaryColor ?? "UNK";
         var secondary = vehData.SecondaryColor ?? "UNK";
 
-        string colors = primary == secondary
+        var colors = primary == secondary
             ? $"~y~{primary}~s~"
             : $"~y~{primary}~s~ / ~y~{secondary}~s~";
 
-        string message =
+        var message =
             $"~b~Camera Zone:~s~ {zone}\n" +
             $"~b~License Plate:~s~ ~y~{plate}~s~\n" +
             $"~b~Vehicle:~s~ ~y~{make} {model}~s~\n" +

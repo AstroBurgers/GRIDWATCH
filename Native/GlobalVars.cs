@@ -17,7 +17,7 @@ internal static class GlobalVars
 
     internal static float GetLightLevelModifier()
     {
-        int hour = World.TimeOfDay.Hours;
+        var hour = World.TimeOfDay.Hours;
         return hour switch
         {
             >= 23 or < 5 => 0.7f, // Dark night
@@ -29,7 +29,7 @@ internal static class GlobalVars
     internal static float GetDirtModifier(Vehicle vehicle)
     {
         // 0.0f (clean) to ~15.0f (filthy)
-        float dirt = vehicle.DirtLevel;
+        var dirt = vehicle.DirtLevel;
 
         return dirt switch
         {
