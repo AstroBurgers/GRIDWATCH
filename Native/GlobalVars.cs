@@ -1,6 +1,4 @@
-﻿using Rage.Native;
-
-namespace GRIDWATCH.Native;
+﻿namespace GRIDWATCH.Native;
 internal static class GlobalVars
 {
     internal static Ped MainPlayer => Game.LocalPlayer.Character;

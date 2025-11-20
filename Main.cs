@@ -1,6 +1,3 @@
-using GRIDWATCH.Config;
-using GRIDWATCH.Core;
-using GRIDWATCH.Features.Alerts;
 using GRIDWATCH.Features.Cameras;
 using LSPD_First_Response.Mod.API;
 
@@ -39,6 +36,10 @@ public class Main : Plugin
         }
     }
 
+    /// <summary>
+    /// Called when the AppDomain is unloaded to perform cleanup. Fires AFTER LSPD First Response's Finally method.
+    /// Better to use this instead of Finally, since Finally does not fire if the plugin is unloaded due to an error.
+    /// </summary>
     private static void Cleanup(object sender, EventArgs e)
     {
         ScanManager.TerminateScanManager();
@@ -53,10 +54,6 @@ public class Main : Plugin
     /// </summary>
     public override void Finally()
     {
-        ScanManager.TerminateScanManager();
-        BlipHandler.CleanupBlips();
-        GameFiberHandling.CleanupFibers();
-
-        Normal("Unloaded successfully");
+        // Cleanup is handled in the DomainUnload event
     }
 }

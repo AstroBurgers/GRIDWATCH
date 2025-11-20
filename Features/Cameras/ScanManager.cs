@@ -1,8 +1,4 @@
 ﻿using CommonDataFramework.Modules.VehicleDatabase;
-using GRIDWATCH.Config;
-using GRIDWATCH.Core;
-using GRIDWATCH.Features.Alerts;
-using static GRIDWATCH.Native.NativeWrapper;
 
 namespace GRIDWATCH.Features.Cameras;
 
@@ -12,8 +8,6 @@ internal static class ScanManager
 
     internal static void ScanProcess()
     {
-        var scanInterval = Settings.UserConfig.ScanInterval;
-
         while (true)
         {
             GameFiber.Yield();
@@ -44,7 +38,7 @@ internal static class ScanManager
                 }
             }
 
-            GameFiber.Wait(1);
+            GameFiber.Wait(UserConfig.ScanInterval);
         }
         // ReSharper disable once FunctionNeverReturns
     }
@@ -116,7 +110,7 @@ internal static class ScanManager
     private static bool ShouldReadPlate(Vehicle vehicle)
     {
         // base chance (user config 0–100)
-        float effectiveChance = Settings.UserConfig.ReadChance;
+        float effectiveChance = UserConfig.ReadChance;
 
         // Apply modifiers
         effectiveChance *= IsWeatherInclement() ? 0.8f : 1.0f;
