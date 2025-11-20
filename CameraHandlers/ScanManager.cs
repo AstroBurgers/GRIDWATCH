@@ -6,7 +6,7 @@ namespace GRIDWATCH.CameraHandlers;
 
 internal static class ScanManager
 {
-    internal static Dictionary<Vehicle, uint> ScannedVehicles = new();
+    private static Dictionary<Vehicle, uint> _scannedVehicles = new();
 
     internal static void ScanProcess()
     {
@@ -17,9 +17,7 @@ internal static class ScanManager
             GameFiber.Yield();
 
             // Pre-fetch vehicles once per scan cycle
-            var vehicles = World.GetAllVehicles()
-                .Where(v => v.Exists() && v.IsDriveable)
-                .ToList();
+            var vehicles = World.GetAllVehicles();
 
             // Grab nearby lights
             var cameras = CameraFetcher.FetchNearbyCameras();
@@ -28,37 +26,39 @@ internal static class ScanManager
             {
                 foreach (var veh in vehicles)
                 {
+                    if (!veh.Exists()) continue;
+                    
+                    // avoid reprocessing already scanned vehicles
+                    if (_scannedVehicles.ContainsKey(veh)) continue;
+                    
                     float distance = veh.DistanceTo(cam.Position);
                     if (distance > 30f) continue;
 
                     // Line of sight test
-                    if (!HasEntityClearLosToEntity(cam, veh))
-                        continue;
-
-                    // avoid reprocessing already scanned vehicles
-                    if (ScannedVehicles.ContainsKey(veh)) continue;
+                    /*if (!HasEntityClearLosToEntity(cam, veh))
+                        continue;*/
 
                     // Run plate scan
                     // e.g. ProcessPlate(cam, veh, distance);
                     Debug($"Scanned vehicle {veh.LicensePlate} at distance {distance} from camera.");
                     ProcessPlate(cam, veh);
                     
-                    ScannedVehicles[veh] = Game.GameTime;
+                    _scannedVehicles.Add(veh, Game.GameTime);
                 }
             }
 
-            GameFiber.Wait(scanInterval);
+            GameFiber.Wait(1);
         }
         // ReSharper disable once FunctionNeverReturns
     }
 
-    internal static void ProcessPlate(Entity camera, Vehicle vehicle)
+    private static void ProcessPlate(Entity camera, Vehicle vehicle)
     {
         var vehData = vehicle.GetVehicleData();
         if (vehData == null) return;
-        string stolenStatus = vehData.IsStolen ? " ~r~[STOLEN]~s~" : "";
-        string boloStatus = vehData.HasAnyBOLOs ? " ~o~[BOLO]~s~" : "";
-        string wantedStatus = vehData.Owner.Wanted ? " ~r~[WANTED]~s~" : "";
+        var stolenStatus = vehData.IsStolen ? " ~r~[STOLEN]~s~" : "";
+        var boloStatus = vehData.HasAnyBOLOs ? " ~o~[BOLO]~s~" : "";
+        var wantedStatus = vehData.Owner.Wanted ? " ~r~[WANTED]~s~" : "";
         
         if (string.IsNullOrEmpty(stolenStatus) || string.IsNullOrEmpty(boloStatus) ||
             string.IsNullOrEmpty(wantedStatus)) return;
@@ -73,18 +73,11 @@ internal static class ScanManager
     
     internal static void ScannedVehiclesCleanup()
     {
-        var toRemove = new List<Vehicle>();
-        foreach (var kvp in ScannedVehicles)
-        {
-            if (!kvp.Key.Exists() || !kvp.Key.IsDriveable)
-            {
-                toRemove.Add(kvp.Key);
-            }
-        }
+        var toRemove = (from kvp in _scannedVehicles where !kvp.Key.Exists() || !kvp.Key.IsDriveable select kvp.Key).ToList();
 
         foreach (var vehicle in toRemove)
         {
-            ScannedVehicles.Remove(vehicle);
+            _scannedVehicles.Remove(vehicle);
         }
     }
     

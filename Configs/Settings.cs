@@ -36,6 +36,6 @@ internal class Config
 {
     [IniReflectorValue(sectionName: "General_Settings", defaultValue: 85, name: "Read-Chance", description: "Chance that a LPR scan is successful (Default 85)")]
     public int ReadChance;
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 1500, name: "Scan-Interval", description: "How frequent cameras are polled in MS (Default 1500)")]
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 1, name: "Scan-Interval", description: "How frequent cameras are polled in MS (Default 1500)")]
     public int ScanInterval;
 }
