@@ -1,4 +1,5 @@
-﻿using CommonDataFramework.Modules.VehicleDatabase;
+﻿using System.Diagnostics;
+using CommonDataFramework.Modules.VehicleDatabase;
 using static GRIDWATCH.Utils.NativeWrapper;
 
 namespace GRIDWATCH.CameraHandlers;
@@ -39,9 +40,8 @@ internal static class ScanManager
 
                     // Run plate scan
                     // e.g. ProcessPlate(cam, veh, distance);
-                    Game.DisplayNotification($"Camera at {cam.Position} scanned vehicle {veh.Model.Name} at distance {distance:F1}m");
-
-                    var data = veh.GetVehicleData();
+                    Debug($"Scanned vehicle {veh.LicensePlate} at distance {distance} from camera.");
+                    ProcessPlate(cam, veh);
                     
                     ScannedVehicles[veh] = Game.GameTime;
                 }
@@ -49,6 +49,26 @@ internal static class ScanManager
 
             GameFiber.Wait(scanInterval);
         }
+        // ReSharper disable once FunctionNeverReturns
+    }
+
+    internal static void ProcessPlate(Entity camera, Vehicle vehicle)
+    {
+        var vehData = vehicle.GetVehicleData();
+        if (vehData == null) return;
+        string stolenStatus = vehData.IsStolen ? " ~r~[STOLEN]~s~" : "";
+        string boloStatus = vehData.HasAnyBOLOs ? " ~o~[BOLO]~s~" : "";
+        string wantedStatus = vehData.Owner.Wanted ? " ~r~[WANTED]~s~" : "";
+        
+        if (string.IsNullOrEmpty(stolenStatus) || string.IsNullOrEmpty(boloStatus) ||
+            string.IsNullOrEmpty(wantedStatus)) return;
+        
+        Game.DisplayNotification("3dtextures",
+            "mpgroundlogo_cops",
+            "GRIDWATCH",
+            "~b~License Plate Scanned",
+            $"Camera Area: {LSPD_First_Response.Mod.API.Functions.GetZoneAtPosition(camera.Position).RealAreaName}\nPlate: ~y~{vehicle.LicensePlate}~s~\nModel: ~y~{vehicle.Model.Name}\nColor: ~y~{vehData.PrimaryColor} / {vehData.SecondaryColor}\nFlags: ~y~{stolenStatus} {boloStatus} {wantedStatus}"
+        );
     }
     
     internal static void ScannedVehiclesCleanup()
