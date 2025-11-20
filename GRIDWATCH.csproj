@@ -66,10 +66,14 @@
         <Compile Include="Core\GameFiberHandling.cs" />
         <Compile Include="Core\GlobalUsings.cs" />
         <Compile Include="Core\Logger.cs" />
+        <Compile Include="Features\Alerts\AlertManager.cs" />
         <Compile Include="Features\Alerts\BlipHandler.cs" />
         <Compile Include="Features\Alerts\SharedMethods.cs" />
-        <Compile Include="Features\Cameras\CameraFetcher.cs" />
+        <Compile Include="Features\Cameras\LicensePlateHit.cs" />
         <Compile Include="Features\Cameras\ScanManager.cs" />
+        <Compile Include="Features\SharedSystems\CameraFetcher.cs" />
+        <Compile Include="Features\Shotspotter\GunfireIncident.cs" />
+        <Compile Include="Features\Shotspotter\SpawnProcess.cs" />
         <Compile Include="Main.cs" />
         <Compile Include="Native\Enums\WeatherType.cs" />
         <Compile Include="Native\GlobalVars.cs" />

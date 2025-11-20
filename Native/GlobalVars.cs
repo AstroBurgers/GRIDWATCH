@@ -1,4 +1,6 @@
-﻿namespace GRIDWATCH.Native;
+﻿using static GRIDWATCH.Native.Enums.WeatherType;
+
+namespace GRIDWATCH.Native;
 internal static class GlobalVars
 {
     internal static Ped MainPlayer => Game.LocalPlayer.Character;
@@ -7,10 +9,7 @@ internal static class GlobalVars
     internal static bool IsWeatherInclement()
     {
         int currentWeather = NativeFunction.Natives.GET_PREV_WEATHER_TYPE_HASH_NAME<int>();
-        return currentWeather == (int)WeatherType.Rain || currentWeather == (int)WeatherType.Thunder ||
-               currentWeather == (int)WeatherType.Snow ||
-               currentWeather == (int)WeatherType.Snowlight ||
-               currentWeather == (int)WeatherType.Blizzard || currentWeather == (int)WeatherType.Xmas;
+        return currentWeather is (int)Rain or (int)Thunder or (int)Snow or (int)Snowlight or (int)Blizzard or (int)Xmas;
     }
 
     internal static float GetLightLevelModifier()

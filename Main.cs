@@ -1,4 +1,5 @@
 using GRIDWATCH.Features.Cameras;
+using GRIDWATCH.Features.Shotspotter;
 using LSPD_First_Response.Mod.API;
 
 namespace GRIDWATCH;
@@ -8,6 +9,8 @@ namespace GRIDWATCH;
 /// </summary>
 public class Main : Plugin
 {
+    internal static bool OnDuty;
+    
     /// <summary>
     /// LSPD First Response calls this method when the plugin is initialized.
     /// </summary>
@@ -19,14 +22,16 @@ public class Main : Plugin
 
     private static void Functions_OnDutyStateChanged(bool onDuty)
     {
+        OnDuty = onDuty;
         if (onDuty)
         {
             GameFiber.StartNew(() =>
             {
                 Normal("Adding console commands...");
                 Game.AddConsoleCommands();
-                Settings.IniFileSetup();
+                IniFileSetup();
                 GameFiberHandling.ActiveGameFibers.Add(GameFiber.StartNew(ScanManager.ScanProcess));
+                GameFiberHandling.ActiveGameFibers.Add(GameFiber.StartNew(SpawnProcess.Start));
                 SharedMethods.DisplayGridwatchAlert("GRIDWATCH", "Plugin loaded ~g~successfully~s~, scanning activated!");
                 AppDomain.CurrentDomain.DomainUnload += Cleanup;
             });

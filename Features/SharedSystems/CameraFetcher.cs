@@ -1,4 +1,4 @@
-﻿namespace GRIDWATCH.Features.Cameras;
+﻿namespace GRIDWATCH.Features.SharedSystems;
 
 internal static class CameraFetcher
 {
@@ -21,7 +21,7 @@ internal static class CameraFetcher
             // Randomize and pick up to the user configured max number of cameras
             var randomCameras = worldCameras
                 .OrderBy(_ => Rndm.Next())
-                .Take(Settings.UserConfig.MaxCamerasPerScan)
+                .Take(UserConfig.MaxCamerasPerScan)
                 .ToList();
 
             return randomCameras;
@@ -30,6 +30,29 @@ internal static class CameraFetcher
         {
             Error(ex);
             return [];
+        }
+    }
+    
+    internal static Entity FetchNearestCamera(Vector3 position)
+    {
+        try
+        {
+            var worldCameras = World.GetAllEntities()
+                .Where(p => CameraProps.Contains(p.Model.Hash))
+                .ToList();
+
+            Debug($"Fetched {worldCameras.Count} cameras for nearest search");
+
+            var nearestCamera = worldCameras
+                .OrderBy(cam => cam.Position.DistanceTo(position))
+                .FirstOrDefault();
+
+            return nearestCamera;
+        }
+        catch (Exception ex)
+        {
+            Error(ex);
+            return null;
         }
     }
 }
