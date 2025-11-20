@@ -9,6 +9,7 @@ internal static class EventConsumers
     static EventConsumers()
     {
         EventHub.Subscribe<LicensePlateHit>(OnPlateHit);
+        EventHub.Subscribe<GunfireIncident>(OnGunfireIncident);
     }
 
     internal static void Initialize()
