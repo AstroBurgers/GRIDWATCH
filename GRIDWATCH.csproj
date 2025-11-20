@@ -72,6 +72,8 @@
         <Compile Include="Features\Cameras\LicensePlateHit.cs" />
         <Compile Include="Features\Cameras\ScanManager.cs" />
         <Compile Include="Features\SharedSystems\CameraFetcher.cs" />
+        <Compile Include="Features\SharedSystems\EventHub.cs" />
+        <Compile Include="Features\SharedSystems\SensorScheduler.cs" />
         <Compile Include="Features\Shotspotter\GunfireIncident.cs" />
         <Compile Include="Features\Shotspotter\SpawnProcess.cs" />
         <Compile Include="Main.cs" />
