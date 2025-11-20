@@ -1,12 +1,12 @@
 ﻿using GRIDWATCH.Configs;
 
-public class CameraFetcher
+internal static class CameraFetcher
 {
-    internal static readonly List<uint> CameraProps = new()
-    {
+    private static readonly uint[] CameraProps =
+    [
         0x3e2b73a4, 0x336e5e2a, 0xd8eba922, 0xd4729f50,
         0x272244b2, 0x33986eae, 0x2323cdc5
-    };
+    ];
 
     internal static List<Entity> FetchNearbyCameras()
     {
@@ -24,7 +24,7 @@ public class CameraFetcher
             // Randomize and pick up to 5
             var randomCameras = worldCameras
                 .OrderBy(_ => Rndm.Next())
-                .Take(5)
+                .Take(Settings.UserConfig.MaxCamerasPerScan)
                 .ToList();
 
             return randomCameras;
@@ -32,7 +32,7 @@ public class CameraFetcher
         catch (Exception ex)
         {
             Error(ex);
-            return new List<Entity>();
+            return [];
         }
     }
 }

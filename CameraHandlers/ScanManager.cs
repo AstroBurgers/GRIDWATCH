@@ -71,14 +71,20 @@ internal static class ScanManager
             $"Camera Area: ~b~{LSPD_First_Response.Mod.API.Functions.GetZoneAtPosition(camera.Position).RealAreaName}\nPlate: ~y~{vehicle.LicensePlate}~s~\nModel: ~y~{vehicle.Model.Name}~s~\nColor: ~y~{vehData.PrimaryColor} / {vehData.SecondaryColor}~s~\nFlags: ~y~{stolenStatus} {boloStatus} {wantedStatus}~s~"
         );
 
-        GameFiberHandling.OutcomeGameFibers.Add(
+        GameFiberHandling.ActiveGameFibers.Add(
             GameFiber.StartNew(() =>
                 {
-                    var blip = new Blip(vehicle.Position, 50f);
-                    blip.Color = System.Drawing.Color.Red;
-                    blip.Alpha = 0.5f;
-                    blip.Name = $"GRIDWATCH Alert: {vehicle.LicensePlate}";
-                    blip.Flash(10, 30000);
+                    var blip = new Blip(vehicle.Position, 50f)
+                    {
+                        Color = System.Drawing.Color.Red,
+                        Alpha = 0.5f,
+                        Name = $"GRIDWATCH Alert: {vehicle.LicensePlate}"
+                    };
+                    blip.Flash(500, 30000);
+                    BlipHandler.ActiveBlips.Add(blip);
+                    GameFiber.Wait(30000);
+                    BlipHandler.ActiveBlips.Remove(blip);
+                    blip.Delete();
                 }, $"GRIDWATCH Blip Thread {vehicle.LicensePlate}")
         );
     }

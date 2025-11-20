@@ -2,14 +2,14 @@
 
 public class GameFiberHandling
 {
-    internal static readonly HashSet<GameFiber> OutcomeGameFibers = [];
+    internal static readonly HashSet<GameFiber> ActiveGameFibers = [];
 
     internal static void CleanupFibers()
     {
         GameFiber.StartNew(() =>
         {
             // Debug("Cleaning up running GameFibers...");
-            OutcomeGameFibers.RemoveWhere(fiber =>
+            ActiveGameFibers.RemoveWhere(fiber =>
             {
                 if (!fiber.IsAlive) return false;
                 fiber.Abort();
@@ -17,5 +17,4 @@ public class GameFiberHandling
             });
         });
     }
-        
 }
