@@ -9,7 +9,7 @@ internal static class EventHub
         var type = typeof(T);
         if (!Subscribers.TryGetValue(type, out var handlers))
         {
-            handlers = new List<Action<object>>();
+            handlers = [];
             Subscribers[type] = handlers;
         }
 

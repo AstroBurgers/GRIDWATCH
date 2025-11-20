@@ -64,7 +64,6 @@ internal static class SharedMethods
             message
         );
 
-        // 🔥 Publish to event bus instead of handling output here
         EventHub.Publish(plateHit);
     }
 

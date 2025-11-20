@@ -7,7 +7,6 @@ global using System.Linq;
 global using System.Reflection;
 global using System.Windows.Forms;
 global using Rage;
-global using GRIDWATCH.Config;
 global using GRIDWATCH.Core;
 global using GRIDWATCH.Features.Alerts;
 global using Rage.Native;

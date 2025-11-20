@@ -54,7 +54,8 @@ internal static class SpawnProcess
             switch (Rndm.Next(0, 101))
             {
                 case <= 50:
-                    shooter.Tasks.FightAgainst(shooter.GetNearbyPeds(16).OrderBy(p => p.Position.DistanceTo(shooter.Position)).FirstOrDefault(), 30000);
+                    shooter.Tasks.FightAgainst(shooter.GetNearbyPeds(16).OrderBy(p => p.Position.DistanceTo(shooter.Position)).FirstOrDefault(), 30000).WaitForCompletion();
+                    shooter.Tasks.Wander();
                     break;
                 case >= 49:
                     var target = new Vector3(
@@ -64,7 +65,7 @@ internal static class SpawnProcess
                     );
 
                     shooter.Tasks.AimWeaponAt(target, 3000);
-                    shooter.Tasks.FireWeaponAt(target, 5000, FiringPattern.FullAutomatic);
+                    shooter.Tasks.FireWeaponAt(target, 5000, FiringPattern.FullAutomatic).WaitForCompletion();
                     shooter.Tasks.Wander();
                     break;
             }

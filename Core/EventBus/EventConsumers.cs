@@ -47,7 +47,7 @@ internal static class EventConsumers
     {
         SharedMethods.DisplayGridwatchAlert(
             type: "VEHICLE SCAN TRIGGERED",
-            message: hit.OriginalMessage
+            message: hit.Message
         );
 
         GameFiberHandling.ActiveGameFibers.Add(

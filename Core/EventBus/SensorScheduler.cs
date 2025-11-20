@@ -4,9 +4,9 @@ namespace GRIDWATCH.Core.EventBus;
 
 internal static class SensorScheduler
 {
-    private static readonly List<ISensor> _sensors = new();
+    private static readonly List<ISensor> Sensors = [];
 
-    public static void Register(ISensor sensor) => _sensors.Add(sensor);
+    public static void Register(ISensor sensor) => Sensors.Add(sensor);
 
     public static void Run()
     {
@@ -15,7 +15,7 @@ internal static class SensorScheduler
             while (true)
             {
                 var cameras = CameraFetcher.FetchNearbyCameras();
-                foreach (var s in _sensors)
+                foreach (var s in Sensors)
                     s.Tick(cameras);
 
                 GameFiber.Wait(UserConfig.ScanInterval);

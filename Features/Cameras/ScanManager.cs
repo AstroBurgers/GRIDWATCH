@@ -7,7 +7,7 @@ namespace GRIDWATCH.Features.Cameras;
 
 internal class ScanManager : ISensor
 {
-    private static readonly Dictionary<Vehicle, uint> _scannedVehicles = new();
+    private static readonly Dictionary<Vehicle, uint> ScannedVehicles = new();
 
     public void Tick(IEnumerable<Entity> cameras)
     {
@@ -17,7 +17,7 @@ internal class ScanManager : ISensor
         {
             foreach (var veh in vehicles)
             {
-                if (!veh.Exists() || _scannedVehicles.ContainsKey(veh))
+                if (!veh.Exists() || ScannedVehicles.ContainsKey(veh))
                     continue;
 
                 var distance = veh.DistanceTo(cam.Position);
@@ -28,18 +28,18 @@ internal class ScanManager : ISensor
                     continue;
 
                 ProcessPlate(cam, veh);
-                _scannedVehicles[veh] = Game.GameTime;
+                ScannedVehicles[veh] = Game.GameTime;
             }
         }
     }
 
     internal static void Cleanup()
     {
-        var toRemove = _scannedVehicles.Keys
+        var toRemove = ScannedVehicles.Keys
             .Where(v => !v.Exists() || !v.IsDriveable)
             .ToList();
 
         foreach (var v in toRemove)
-            _scannedVehicles.Remove(v);
+            ScannedVehicles.Remove(v);
     }
 }

@@ -15,8 +15,7 @@ internal static class AlertManager
 
         private static void OnLicensePlateHit(LicensePlateHit hit)
         {
-            SharedMethods.DisplayGridwatchAlert("VEHICLE SCAN TRIGGERED", hit.OriginalMessage);
-            // spawn blips, logs, whatever
+            SharedMethods.DisplayGridwatchAlert("VEHICLE SCAN TRIGGERED", hit.Message);
         }
 
         private static void OnGunfireIncident(GunfireIncident shot)
@@ -24,7 +23,6 @@ internal static class AlertManager
             string streetName = World.GetStreetName(shot.Location);
             SharedMethods.DisplayGridwatchAlert("GUNFIRE DETECTED",
                 $"Possible shooting detected on ~r~{streetName}~s~");
-            // optionally: dispatch a camera scan focused around the location
         }
     }
 }

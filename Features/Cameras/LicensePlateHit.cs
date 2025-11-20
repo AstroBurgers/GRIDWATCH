@@ -9,9 +9,9 @@ internal struct LicensePlateHit
     internal string Model { get; }
     internal string PrimaryColor { get; }
     internal string SecondaryColor { get; }
-    internal string OriginalMessage { get; }
+    internal string Message { get; }
     
-    internal LicensePlateHit(Vector3 location, string licensePlate, string make, string model, string primaryColor, string secondaryColor, string originalMessage)
+    internal LicensePlateHit(Vector3 location, string licensePlate, string make, string model, string primaryColor, string secondaryColor, string message)
     {
         Location = location;
         LicensePlate = licensePlate;
@@ -20,6 +20,6 @@ internal struct LicensePlateHit
         Model = model;
         PrimaryColor = primaryColor;
         SecondaryColor = secondaryColor;
-        OriginalMessage = originalMessage;
+        Message = message;
     }
 }
