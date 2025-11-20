@@ -20,8 +20,7 @@ public class Main : Plugin
         Normal("Plugin initialized, go on duty to fully load plugin.");
         Functions.OnOnDutyStateChanged += Functions_OnDutyStateChanged;
     }
-
-
+    
     private static void Functions_OnDutyStateChanged(bool onDuty)
     {
         OnDuty = onDuty;

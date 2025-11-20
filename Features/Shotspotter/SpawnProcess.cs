@@ -27,12 +27,15 @@ internal static class SpawnProcess
                 }
 
                 // Simulate random gunfire activity
-                if (Rndm.Next(0, 100) < 5)
+                if (Rndm.Next(0, 100) <= UserConfig.ShotspotterChance)
                 {
+                    if (Rndm.Next(0, 100) <= UserConfig.ShotspotterFalseAlarmChance) {
+                        return;
+                    }
                     SpawnGunfireIncident();
                 }
 
-                GameFiber.Wait(60000); // 1-minute loop interval
+                GameFiber.Wait(UserConfig.ShotspotterPollRate);
             }
         });
     }
@@ -48,24 +51,30 @@ internal static class SpawnProcess
             var shooter = new Ped(pos, Rndm.Next(0, 360));
             shooter.Inventory.GiveNewWeapon(GunTypes[Rndm.Next(GunTypes.Length)], -1, true);
 
-            // simple firing animation simulation
-            var target = new Vector3(
-                pos.X + Rndm.Next(-10, 10),
-                pos.Y + Rndm.Next(-10, 10),
-                pos.Z
-            );
+            switch (Rndm.Next(0, 101))
+            {
+                case <= 50:
+                    shooter.Tasks.FightAgainst(shooter.GetNearbyPeds(16).OrderBy(p => p.Position.DistanceTo(shooter.Position)).FirstOrDefault(), 30000);
+                    break;
+                case >= 49:
+                    var target = new Vector3(
+                        pos.X + Rndm.Next(-10, 10),
+                        pos.Y + Rndm.Next(-10, 10),
+                        pos.Z
+                    );
 
-            shooter.Tasks.AimWeaponAt(target, 3000);
-            shooter.Tasks.FireWeaponAt(target, 5000, FiringPattern.FullAutomatic);
+                    shooter.Tasks.AimWeaponAt(target, 3000);
+                    shooter.Tasks.FireWeaponAt(target, 5000, FiringPattern.FullAutomatic);
+                    shooter.Tasks.Wander();
+                    break;
+            }
 
-            // Build a structured event
             var incident = new GunfireIncident(
                 loc: pos,
                 shooter: shooter,
                 weapon: shooter.Inventory.EquippedWeapon.ToString()
             );
 
-            // 🧠 Publish to your central event hub
             EventHub.Publish(incident);
         }
         catch (Exception ex)
