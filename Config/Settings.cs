@@ -39,20 +39,19 @@ internal class Config
         description: "How frequent cameras are polled in MS (Default 1500)")]
     public int ScanInterval;
 
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 1500, name: "Shotspotter-Poll-Interval",
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 60000, name: "Shotspotter-Poll-Interval",
         description: "How frequently Shotspotter events are polled in MS (Default 60000)")]
     public int ShotspotterPollRate;
 
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 1500, name: "Shotspotter-Chance",
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 5, name: "Shotspotter-Chance",
         description: "Chance of Shotspotter event occurring per poll (Default 5)")]
     public int ShotspotterChance;
 
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 1500, name: "Shotspotter-False-Alarm-Chance",
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 20, name: "Shotspotter-False-Alarm-Chance",
         description: "Chance of Shotspotter event being a false alarm (Default 20)")]
     public int ShotspotterFalseAlarmChance;
     
-    
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 1500, name: "Max-Cameras-Per-Scan",
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 5, name: "Max-Cameras-Per-Scan",
         description: "The maximum number of cameras to process per scan cycle (Default 5)")]
     public int MaxCamerasPerScan;
 
@@ -60,8 +59,8 @@ internal class Config
         description: "Button to open the GRIDWATCH menu (Default O)")]
     public Keys MenuKey;
 
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: Keys.O, name: "MenuManager-Modifier-Key",
-        description: "Button modifier to open the GRIDWATCH menu (Default O)")]
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: Keys.LControlKey, name: "MenuManager-Modifier-Key",
+        description: "Button modifier to open the GRIDWATCH menu (Default LControlKey)")]
     public Keys MenuModifierKey;
     
     [IniReflectorValue(sectionName: "General_Settings", defaultValue: false, name: "Enable-Debug-Mode",

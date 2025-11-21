@@ -6,11 +6,12 @@ namespace GRIDWATCH.Features.Menus;
 
 internal abstract class DynamicDataMenu<T>
 {
-    protected readonly UIMenu Menu;
+    internal readonly UIMenu Menu;
     protected readonly Func<List<T>> DataFetcher;
     protected readonly string NoDataMessage;
     protected readonly Action ClearAction;
-
+    
+    
     protected DynamicDataMenu(
         string title,
         Func<List<T>> dataFetcher,

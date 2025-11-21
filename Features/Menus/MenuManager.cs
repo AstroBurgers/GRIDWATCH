@@ -21,6 +21,8 @@ internal static class MenuManager
         alprMenu.AttachTo(MainMenu, "License Plate Hits");
         shotspotterMenu.AttachTo(MainMenu, "Shotspotter");
 
+        MenuPool.Add(settingsMenu.Menu, alprMenu.Menu, shotspotterMenu.Menu);
+        
         GameFiber.StartNew(ProcessMenuLoop, "GRIDWATCH Menu Handler");
     }
 

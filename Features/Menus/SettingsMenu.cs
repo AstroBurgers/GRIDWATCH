@@ -8,45 +8,44 @@ namespace GRIDWATCH.Features.Menus;
 
 internal sealed class SettingsMenu
 {
-    private readonly UIMenu _menu;
+    internal readonly UIMenu Menu;
 
     #region Settings items
 
     private readonly UIMenuNumericScrollerItem<int> _readChanceItem =
-        new UIMenuNumericScrollerItem<int>(
+        new(
             "Read Chance", "Chance a LPR scan succeeds.", 0, 100, 1);
 
     private readonly UIMenuNumericScrollerItem<int> _scanIntervalItem =
-        new UIMenuNumericScrollerItem<int>(
+        new(
             "Scan Interval (MS)", "How frequent cameras are polled.", 100, 5000, 100);
 
     private readonly UIMenuNumericScrollerItem<int> _shotspotterPollRateItem =
-        new UIMenuNumericScrollerItem<int>(
+        new(
             "Shotspotter Poll Rate (MS)", "How often Shotspotter polls for gunfire.", 1000, 120000, 500);
 
     private readonly UIMenuNumericScrollerItem<int> _shotspotterChanceItem =
-        new UIMenuNumericScrollerItem<int>(
+        new(
             "Shotspotter Chance", "Chance of a Shotspotter event per poll.", 0, 100, 1);
 
     private readonly UIMenuNumericScrollerItem<int> _shotspotterFalseAlarmChanceItem =
-        new UIMenuNumericScrollerItem<int>(
+        new(
             "False Alarm Chance", "Chance a Shotspotter call is bogus.", 0, 100, 1);
 
     private readonly UIMenuNumericScrollerItem<int> _maxCamerasPerScanItem =
-        new UIMenuNumericScrollerItem<int>(
+        new(
             "Max Cameras/Scan", "How many cameras are processed per cycle.", 1, 20, 1);
 
-    private readonly List<dynamic> _keyList =
-        new List<dynamic>(Enum.GetValues(typeof(Keys)).Cast<object>().ToList());
+    private readonly List<dynamic> _keyList = new(Enum.GetValues(typeof(Keys)).Cast<object>().ToList());
 
     private readonly UIMenuListItem _menuKeyItem;
     private readonly UIMenuListItem _menuModifierKeyItem;
 
     private readonly UIMenuCheckboxItem _debugModeItem =
-        new UIMenuCheckboxItem("Enable Debug Mode", false, "Enable verbose logging and debug info.");
+        new("Enable Debug Mode", false, "Enable verbose logging and debug info.");
 
     private readonly UIMenuItem _saveSettingsItem =
-        new UIMenuItem("Save Settings", "Save current settings to INI file.")
+        new("Save Settings", "Save current settings to INI file.")
         {
             BackColor = Color.Green,
             HighlightedBackColor = Color.DarkGreen
@@ -56,7 +55,7 @@ internal sealed class SettingsMenu
 
     public SettingsMenu()
     {
-        _menu = new UIMenu("Settings", "GRIDWATCH Configuration")
+        Menu = new UIMenu("Settings", "GRIDWATCH Configuration")
         {
             MouseControlsEnabled = false,
             AllowCameraMovement = true
@@ -74,28 +73,28 @@ internal sealed class SettingsMenu
         AddSettingsItems();
         LoadConfigValues();
 
-        _menu.OnItemSelect += OnItemSelect;
+        Menu.OnItemSelect += OnItemSelect;
     }
 
     public void AttachTo(UIMenu parent, string label)
     {
         var item = new UIMenuItem(label);
         parent.AddItem(item);
-        parent.BindMenuToItem(_menu, parent.MenuItems[parent.MenuItems.Count - 1]);
+        parent.BindMenuToItem(Menu, parent.MenuItems[parent.MenuItems.Count - 1]);
     }
 
     private void AddSettingsItems()
     {
-        _menu.AddItem(_readChanceItem);
-        _menu.AddItem(_scanIntervalItem);
-        _menu.AddItem(_shotspotterPollRateItem);
-        _menu.AddItem(_shotspotterChanceItem);
-        _menu.AddItem(_shotspotterFalseAlarmChanceItem);
-        _menu.AddItem(_maxCamerasPerScanItem);
-        _menu.AddItem(_menuKeyItem);
-        _menu.AddItem(_menuModifierKeyItem);
-        _menu.AddItem(_debugModeItem);
-        _menu.AddItem(_saveSettingsItem);
+        Menu.AddItem(_readChanceItem);
+        Menu.AddItem(_scanIntervalItem);
+        Menu.AddItem(_shotspotterPollRateItem);
+        Menu.AddItem(_shotspotterChanceItem);
+        Menu.AddItem(_shotspotterFalseAlarmChanceItem);
+        Menu.AddItem(_maxCamerasPerScanItem);
+        Menu.AddItem(_menuKeyItem);
+        Menu.AddItem(_menuModifierKeyItem);
+        Menu.AddItem(_debugModeItem);
+        Menu.AddItem(_saveSettingsItem);
     }
 
     private void LoadConfigValues()

@@ -18,7 +18,7 @@ internal class ScanManager : ISensor
                     continue;
 
                 var distance = veh.DistanceTo(cam.Position);
-                if (distance >= 50f || !HasEntityClearLosToEntity(cam, veh))
+                if (distance >= 50f || !HasEntityClearLosToEntity(cam, veh) || !veh.Driver.Exists())
                     continue;
 
                 if (!ShouldReadPlate(veh))
