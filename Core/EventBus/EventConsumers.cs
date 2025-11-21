@@ -7,11 +7,8 @@ namespace GRIDWATCH.Core.EventBus;
 
 internal static class EventConsumers
 {
-    static EventConsumers()
-    {
-        EventHub.Subscribe<LicensePlateHit>(OnPlateHit);
-        EventHub.Subscribe<GunfireIncident>(OnGunfireIncident);
-    }
+    private static List<LicensePlateHit> _alprHits = [];
+    private static List<GunfireIncident> _gunfireIncidents = [];
 
     internal static void Initialize()
     {
@@ -21,9 +18,9 @@ internal static class EventConsumers
 
     private static void OnGunfireIncident(GunfireIncident shot)
     {
-        SharedMethods.DisplayGridwatchAlert("GUNFIRE DETECTED",
-            $"Possible shooting detected on ~r~{World.GetStreetName(shot.Location)}~s~ in {LSPD_First_Response.Mod.API.Functions.GetZoneAtPosition(shot.Location)
-                ?.RealAreaName ?? "Unknown"}");
+        SharedMethods.DisplayGridwatchAlert("SHOTSPOTTER ALERT",
+            $"Possible shooting detected on ~r~{World.GetStreetName(shot.Location)}~s~ in ~b~{LSPD_First_Response.Mod.API.Functions.GetZoneAtPosition(shot.Location)
+                ?.RealAreaName ?? "Unknown"}~s~");
         
         CreateTimedBlip(shot.Location, Color.OrangeRed, $"GRIDWATCH Alert: Shotspotter {shot.Timestamp}",
             30000);
@@ -32,7 +29,7 @@ internal static class EventConsumers
     private static void OnPlateHit(LicensePlateHit hit)
     {
         SharedMethods.DisplayGridwatchAlert(
-            type: "VEHICLE SCAN TRIGGERED",
+            type: "ALPR ALERT",
             message: hit.Message
         );
         

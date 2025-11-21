@@ -63,7 +63,6 @@
         <Compile Include="Config\CamerasIOHandler.cs" />
         <Compile Include="Config\IniReflector.cs" />
         <Compile Include="Config\Settings.cs" />
-        <Compile Include="Core\EventBus\AlertManager.cs" />
         <Compile Include="Core\EventBus\EventConsumers.cs" />
         <Compile Include="Core\EventBus\EventHub.cs" />
         <Compile Include="Core\EventBus\SensorScheduler.cs" />
