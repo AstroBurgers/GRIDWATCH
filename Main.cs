@@ -1,5 +1,6 @@
 using GRIDWATCH.Core.EventBus;
 using GRIDWATCH.Features.Cameras;
+using GRIDWATCH.Features.Menus;
 using GRIDWATCH.Features.Shotspotter;
 using JetBrains.Annotations;
 using LSPD_First_Response.Mod.API;

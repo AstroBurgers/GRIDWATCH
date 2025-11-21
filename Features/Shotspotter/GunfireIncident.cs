@@ -1,6 +1,6 @@
 ﻿namespace GRIDWATCH.Features.Shotspotter;
 
-internal struct GunfireIncident(Vector3 loc, Ped shooter, string weapon, bool hit = false)
+internal readonly struct GunfireIncident(Vector3 loc, Ped shooter, string weapon, bool hit = false)
 {
     internal Vector3 Location { get; } = loc;
     internal Ped Shooter { get; } = shooter;

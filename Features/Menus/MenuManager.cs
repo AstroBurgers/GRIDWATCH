@@ -1,5 +1,6 @@
-﻿using GRIDWATCH.Features.Menus;
-using RAGENativeUI;
+﻿using RAGENativeUI;
+
+namespace GRIDWATCH.Features.Menus;
 
 internal static class MenuManager
 {
