@@ -26,6 +26,7 @@ internal static class EventConsumers
             30000);
         
         GunfireIncidents.Add(shot);
+        API.Events.GunfireIncidentAdded(shot);
     }
 
     private static void OnPlateHit(LicensePlateHit hit)
@@ -39,6 +40,7 @@ internal static class EventConsumers
             30000);
         
         AlprHits.Add(hit);
+        API.Events.LicensePlateHitAdded(hit);
     }
 
 
