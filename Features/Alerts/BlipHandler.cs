@@ -1,4 +1,6 @@
-﻿namespace GRIDWATCH.Features.Alerts;
+﻿using System.Drawing;
+
+namespace GRIDWATCH.Features.Alerts;
 
 internal static class BlipHandler
 {
@@ -21,5 +23,27 @@ internal static class BlipHandler
         }
 
         ActiveBlips.Clear();
+    }
+
+    internal static void CreateTimedBlip(Vector3 position, Color color, string name, int durationMs)
+    {
+        GameFiber.StartNew(() =>
+            {
+                var blip = new Blip(position, 50f)
+                {
+                    Color = color,
+                    Alpha = 0.5f,
+                    Name = $"{name}"
+                };
+
+                blip.Flash(500, durationMs);
+                ActiveBlips.Add(blip);
+
+                GameFiber.Wait(durationMs);
+
+                ActiveBlips.Remove(blip);
+                blip?.Delete();
+            },
+            $"{name}");
     }
 }

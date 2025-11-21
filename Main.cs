@@ -30,19 +30,21 @@ public class Main : Plugin
 
         GameFiber.StartNew(() =>
         {
-            Normal("Adding console commands...");
-            Game.AddConsoleCommands();
-
+            Info("Officer is now on duty, loading GRIDWATCH...");
+            Info("Setting up INI File...");
             IniFileSetup();
-
+            
+            Info("Initializing Event Consumers...");
             EventConsumers.Initialize();
 
+            Info("Registering Sensors...");
             SensorScheduler.Register(new ScanManager());
-            //SensorScheduler.Register(new ShotspotterSensor()); // hypothetical gunfire system
 
+            Info("Starting Sensor Scheduler and Shotspotter Spawn Process...");
             GameFiberHandling.ActiveGameFibers.Add(GameFiber.StartNew(SensorScheduler.Run));
             GameFiberHandling.ActiveGameFibers.Add(GameFiber.StartNew(SpawnProcess.Start));
 
+            Info("Plugin loaded successfully, scanning activated!");
             SharedMethods.DisplayGridwatchAlert(
                 "GRIDWATCH",
                 "Plugin loaded ~g~successfully~s~, scanning activated!"
@@ -62,7 +64,7 @@ public class Main : Plugin
         BlipHandler.CleanupBlips();
         GameFiberHandling.CleanupFibers();
 
-        Normal("Unloaded successfully");
+        Info("Unloaded successfully!");
     }
     
     /// <summary>

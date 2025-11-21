@@ -13,6 +13,8 @@ internal static class Menu
     {
         MenuPool.Add(MainMenu);
         MainMenu.RefreshIndex();
+        
+        SetupMenu();
     }
 
     private static void SetupMenu()

@@ -1,4 +1,5 @@
-﻿using GRIDWATCH.Features.Cameras;
+﻿using System.Drawing;
+using GRIDWATCH.Features.Cameras;
 using GRIDWATCH.Features.SharedSystems;
 using GRIDWATCH.Features.Shotspotter;
 
@@ -23,24 +24,9 @@ internal static class EventConsumers
         SharedMethods.DisplayGridwatchAlert("GUNFIRE DETECTED",
             $"Possible shooting detected on ~r~{World.GetStreetName(shot.Location)}~s~ in {LSPD_First_Response.Mod.API.Functions.GetZoneAtPosition(shot.Location)
                 ?.RealAreaName ?? "Unknown"}");
-        GameFiber.StartNew(() =>
-            {
-                var blip = new Blip(shot.Location, 50f)
-                {
-                    Color = System.Drawing.Color.OrangeRed,
-                    Alpha = 0.5f,
-                    Name = $"GRIDWATCH Alert: Shotspotter {shot.Timestamp}"
-                };
-
-                blip.Flash(500, 30000);
-                BlipHandler.ActiveBlips.Add(blip);
-
-                GameFiber.Wait(30000);
-
-                BlipHandler.ActiveBlips.Remove(blip);
-                blip?.Delete();
-            },
-            $"GRIDWATCH Blip Thread Shotspotter {shot.Timestamp}");
+        
+        BlipHandler.CreateTimedBlip(shot.Location, Color.OrangeRed, $"GRIDWATCH Alert: Shotspotter {shot.Timestamp}",
+            30000);
     }
 
     private static void OnPlateHit(LicensePlateHit hit)
@@ -49,26 +35,8 @@ internal static class EventConsumers
             type: "VEHICLE SCAN TRIGGERED",
             message: hit.Message
         );
-
-        GameFiberHandling.ActiveGameFibers.Add(
-            GameFiber.StartNew(() =>
-                {
-                    var blip = new Blip(hit.Location, 50f)
-                    {
-                        Color = System.Drawing.Color.Red,
-                        Alpha = 0.5f,
-                        Name = $"GRIDWATCH Alert: {hit.LicensePlate}"
-                    };
-
-                    blip.Flash(500, 30000);
-                    BlipHandler.ActiveBlips.Add(blip);
-
-                    GameFiber.Wait(30000);
-
-                    BlipHandler.ActiveBlips.Remove(blip);
-                    blip?.Delete();
-                },
-                $"GRIDWATCH Blip Thread {hit.LicensePlate}")
-        );
+        
+        BlipHandler.CreateTimedBlip(hit.Location, Color.Red, $"GRIDWATCH Alert: {hit.LicensePlate}",
+            30000);
     }
 }
