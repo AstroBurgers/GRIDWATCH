@@ -1,5 +1,4 @@
-﻿using GRIDWATCH.Config;
-using RAGENativeUI;
+﻿using RAGENativeUI;
 using RAGENativeUI.PauseMenu;
 
 namespace GRIDWATCH.Features.SharedSystems;
