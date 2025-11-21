@@ -21,6 +21,15 @@ internal static class MenuManager
         alprMenu.AttachTo(MainMenu, "License Plate Hits");
         shotspotterMenu.AttachTo(MainMenu, "Shotspotter");
 
+        settingsMenu.Menu.MouseControlsEnabled = false;
+        settingsMenu.Menu.AllowCameraMovement = true;
+        
+        alprMenu.Menu.MouseControlsEnabled = false;
+        alprMenu.Menu.AllowCameraMovement = true;
+        
+        shotspotterMenu.Menu.MouseControlsEnabled = false;
+        shotspotterMenu.Menu.AllowCameraMovement = true;
+        
         MenuPool.Add(settingsMenu.Menu, alprMenu.Menu, shotspotterMenu.Menu);
         
         GameFiber.StartNew(ProcessMenuLoop, "GRIDWATCH Menu Handler");
