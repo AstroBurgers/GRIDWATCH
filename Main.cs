@@ -1,13 +1,16 @@
 using GRIDWATCH.Core.EventBus;
 using GRIDWATCH.Features.Cameras;
 using GRIDWATCH.Features.Shotspotter;
+using JetBrains.Annotations;
 using LSPD_First_Response.Mod.API;
+using static GRIDWATCH.Features.SharedSystems.Menu;
 
 namespace GRIDWATCH;
 
 /// <summary>
 /// Main plugin class for GRIDWATCH.
 /// </summary>
+[UsedImplicitly]
 public class Main : Plugin
 {
     internal static bool OnDuty;
@@ -33,6 +36,9 @@ public class Main : Plugin
             Info("Officer is now on duty, loading GRIDWATCH...");
             Info("Setting up INI File...");
             IniFileSetup();
+
+            Info("Creating Menu...");
+            CreateMenu();
             
             Info("Initializing Event Consumers...");
             EventConsumers.Initialize();

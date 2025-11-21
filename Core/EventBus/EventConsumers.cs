@@ -24,6 +24,8 @@ internal static class EventConsumers
         
         CreateTimedBlip(shot.Location, Color.OrangeRed, $"GRIDWATCH Alert: Shotspotter {shot.Timestamp}",
             30000);
+        
+        _gunfireIncidents.Add(shot);
     }
 
     private static void OnPlateHit(LicensePlateHit hit)
@@ -35,5 +37,18 @@ internal static class EventConsumers
         
         CreateTimedBlip(hit.Location, Color.Red, $"GRIDWATCH Alert: {hit.LicensePlate}",
             30000);
+        
+        _alprHits.Add(hit);
+    }
+    
+    
+    public static List<LicensePlateHit> GetAllAlprHits()
+    {
+        return _alprHits;
+    }
+
+    public static List<GunfireIncident> GetAllGunfireIncidents()
+    {
+        return _gunfireIncidents;
     }
 }
