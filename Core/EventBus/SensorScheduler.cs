@@ -20,7 +20,7 @@ internal static class SensorScheduler
 
                 GameFiber.Wait(UserConfig.ScanInterval);
             }
-        });
+        }, "GRIDWATCH Sensor Scheduler");
     }
 }
 
