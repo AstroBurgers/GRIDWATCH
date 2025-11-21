@@ -17,6 +17,9 @@ internal static class SensorScheduler
     {
         while (true)
         {
+            if (LSPD_First_Response.Mod.API.Functions.IsPlayerPerformingPullover()) {
+                continue;
+            }
             var cameras = CameraFetcher.FetchNearbyCameras();
             foreach (var s in Sensors) s.Tick(cameras);
 
