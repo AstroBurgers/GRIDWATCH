@@ -1,4 +1,3 @@
-using GRIDWATCH.Core.EventBus;
 using GRIDWATCH.Features.Cameras;
 using GRIDWATCH.Features.Menus;
 using GRIDWATCH.Features.Shotspotter;

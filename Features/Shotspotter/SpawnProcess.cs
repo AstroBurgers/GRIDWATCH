@@ -1,6 +1,4 @@
-﻿using GRIDWATCH.Core.EventBus;
-
-namespace GRIDWATCH.Features.Shotspotter;
+﻿namespace GRIDWATCH.Features.Shotspotter;
 
 internal static class SpawnProcess
 {

@@ -1,5 +1,4 @@
-﻿using GRIDWATCH.Core.EventBus;
-using static GRIDWATCH.Features.Alerts.SharedMethods;
+﻿using static GRIDWATCH.Features.Alerts.SharedMethods;
 
 namespace GRIDWATCH.Features.Cameras;
 

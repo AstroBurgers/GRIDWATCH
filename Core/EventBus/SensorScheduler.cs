@@ -10,17 +10,18 @@ internal static class SensorScheduler
 
     public static void Run()
     {
-        GameFiber.StartNew(() =>
-        {
-            while (true)
-            {
-                var cameras = CameraFetcher.FetchNearbyCameras();
-                foreach (var s in Sensors)
-                    s.Tick(cameras);
+        GameFiber.StartNew(Start, "GRIDWATCH Sensor Scheduler");
+    }
 
-                GameFiber.Wait(UserConfig.ScanInterval);
-            }
-        }, "GRIDWATCH Sensor Scheduler");
+    private static void Start()
+    {
+        while (true)
+        {
+            var cameras = CameraFetcher.FetchNearbyCameras();
+            foreach (var s in Sensors) s.Tick(cameras);
+
+            GameFiber.Wait(UserConfig.ScanInterval);
+        }
     }
 }
 

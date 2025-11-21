@@ -1,5 +1,4 @@
-﻿using GRIDWATCH.Core.EventBus;
-using GRIDWATCH.Features.Cameras;
+﻿using GRIDWATCH.Features.Cameras;
 using GRIDWATCH.Features.Shotspotter;
 using RAGENativeUI.Elements;
 
