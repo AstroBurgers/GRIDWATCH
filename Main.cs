@@ -3,7 +3,7 @@ using GRIDWATCH.Features.Cameras;
 using GRIDWATCH.Features.Shotspotter;
 using JetBrains.Annotations;
 using LSPD_First_Response.Mod.API;
-using static GRIDWATCH.Features.SharedSystems.Menu;
+using static GRIDWATCH.Features.Menus.Menu;
 
 namespace GRIDWATCH;
 

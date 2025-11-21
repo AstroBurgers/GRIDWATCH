@@ -23,7 +23,7 @@
         <DefineConstants>DEBUG;TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
-        <DocumentationFile>bin\Debug\GRIDWATCH.xml</DocumentationFile>
+        <DocumentationFile></DocumentationFile>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <PlatformTarget>x64</PlatformTarget>
@@ -76,8 +76,8 @@
         <Compile Include="Features\Alerts\SharedMethods.cs" />
         <Compile Include="Features\Cameras\LicensePlateHit.cs" />
         <Compile Include="Features\Cameras\ScanManager.cs" />
+        <Compile Include="Features\Menus\Menu.cs" />
         <Compile Include="Features\SharedSystems\CameraFetcher.cs" />
-        <Compile Include="Features\SharedSystems\Menu.cs" />
         <Compile Include="Features\Shotspotter\GunfireIncident.cs" />
         <Compile Include="Features\Shotspotter\SpawnProcess.cs" />
         <Compile Include="Main.cs" />

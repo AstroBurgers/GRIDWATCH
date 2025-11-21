@@ -40,15 +40,25 @@ internal static class EventConsumers
         
         _alprHits.Add(hit);
     }
-    
-    
-    public static List<LicensePlateHit> GetAllAlprHits()
+
+
+    internal static List<LicensePlateHit> GetAllAlprHits()
     {
         return _alprHits;
     }
 
-    public static List<GunfireIncident> GetAllGunfireIncidents()
+    internal static List<GunfireIncident> GetAllGunfireIncidents()
     {
         return _gunfireIncidents;
+    }
+
+    internal static void ClearAlprHits()
+    {
+        _alprHits.Clear();
+    }
+    
+    internal static void ClearGunfireIncidents()
+    {
+        _gunfireIncidents.Clear();
     }
 }
