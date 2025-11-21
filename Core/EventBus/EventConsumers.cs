@@ -7,8 +7,8 @@ namespace GRIDWATCH.Core.EventBus;
 
 internal static class EventConsumers
 {
-    private static List<LicensePlateHit> _alprHits = [];
-    private static List<GunfireIncident> _gunfireIncidents = [];
+    private static readonly List<LicensePlateHit> AlprHits = [];
+    private static readonly List<GunfireIncident> GunfireIncidents = [];
 
     internal static void Initialize()
     {
@@ -25,7 +25,7 @@ internal static class EventConsumers
         CreateTimedBlip(shot.Location, Color.OrangeRed, $"GRIDWATCH Alert: Shotspotter {shot.Timestamp}",
             30000);
         
-        _gunfireIncidents.Add(shot);
+        GunfireIncidents.Add(shot);
     }
 
     private static void OnPlateHit(LicensePlateHit hit)
@@ -38,27 +38,27 @@ internal static class EventConsumers
         CreateTimedBlip(hit.Location, Color.Red, $"GRIDWATCH Alert: {hit.LicensePlate}",
             30000);
         
-        _alprHits.Add(hit);
+        AlprHits.Add(hit);
     }
 
 
     internal static List<LicensePlateHit> GetAllAlprHits()
     {
-        return _alprHits;
+        return AlprHits;
     }
 
     internal static List<GunfireIncident> GetAllGunfireIncidents()
     {
-        return _gunfireIncidents;
+        return GunfireIncidents;
     }
 
     internal static void ClearAlprHits()
     {
-        _alprHits.Clear();
+        AlprHits.Clear();
     }
     
     internal static void ClearGunfireIncidents()
     {
-        _gunfireIncidents.Clear();
+        GunfireIncidents.Clear();
     }
 }

@@ -31,39 +31,30 @@ internal static class Settings
 
 internal class Config
 {
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 85, name: "Read-Chance",
-        description: "Chance that a LPR scan is successful (Default 85)")]
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 85)]
     public int ReadChance;
 
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 1500, name: "Scan-Interval",
-        description: "How frequent cameras are polled in MS (Default 1500)")]
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 1500)]
     public int ScanInterval;
 
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 60000, name: "Shotspotter-Poll-Interval",
-        description: "How frequently Shotspotter events are polled in MS (Default 60000)")]
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 60000)]
     public int ShotspotterPollRate;
 
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 5, name: "Shotspotter-Chance",
-        description: "Chance of Shotspotter event occurring per poll (Default 5)")]
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 5)]
     public int ShotspotterChance;
 
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 20, name: "Shotspotter-False-Alarm-Chance",
-        description: "Chance of Shotspotter event being a false alarm (Default 20)")]
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 20)]
     public int ShotspotterFalseAlarmChance;
-    
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 5, name: "Max-Cameras-Per-Scan",
-        description: "The maximum number of cameras to process per scan cycle (Default 5)")]
+
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 5)]
     public int MaxCamerasPerScan;
 
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: Keys.O, name: "MenuManager-Key",
-        description: "Button to open the GRIDWATCH menu (Default O)")]
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: Keys.O)]
     public Keys MenuKey;
 
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: Keys.LControlKey, name: "MenuManager-Modifier-Key",
-        description: "Button modifier to open the GRIDWATCH menu (Default LControlKey)")]
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: Keys.LControlKey)]
     public Keys MenuModifierKey;
-    
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: false, name: "Enable-Debug-Mode",
-        description: "Enable debug mode for more verbose logging (Default false)")]
+
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: false)]
     public bool DebugModeEnabled;
 }
