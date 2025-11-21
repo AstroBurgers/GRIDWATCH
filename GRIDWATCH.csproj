@@ -76,7 +76,10 @@
         <Compile Include="Features\Alerts\SharedMethods.cs" />
         <Compile Include="Features\Cameras\LicensePlateHit.cs" />
         <Compile Include="Features\Cameras\ScanManager.cs" />
-        <Compile Include="Features\Menus\Menu.cs" />
+        <Compile Include="Features\Menus\DynamicDataMenu.cs" />
+        <Compile Include="Features\Menus\DynamicMenus.cs" />
+        <Compile Include="Features\Menus\MenuManager.cs" />
+        <Compile Include="Features\Menus\SettingsMenu.cs" />
         <Compile Include="Features\SharedSystems\CameraFetcher.cs" />
         <Compile Include="Features\Shotspotter\GunfireIncident.cs" />
         <Compile Include="Features\Shotspotter\SpawnProcess.cs" />

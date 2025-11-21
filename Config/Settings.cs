@@ -56,11 +56,11 @@ internal class Config
         description: "The maximum number of cameras to process per scan cycle (Default 5)")]
     public int MaxCamerasPerScan;
 
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: Keys.O, name: "Menu-Key",
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: Keys.O, name: "MenuManager-Key",
         description: "Button to open the GRIDWATCH menu (Default O)")]
     public Keys MenuKey;
 
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: Keys.O, name: "Menu-Modifier-Key",
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: Keys.O, name: "MenuManager-Modifier-Key",
         description: "Button modifier to open the GRIDWATCH menu (Default O)")]
     public Keys MenuModifierKey;
     

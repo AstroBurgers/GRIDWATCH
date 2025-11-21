@@ -3,7 +3,6 @@ using GRIDWATCH.Features.Cameras;
 using GRIDWATCH.Features.Shotspotter;
 using JetBrains.Annotations;
 using LSPD_First_Response.Mod.API;
-using static GRIDWATCH.Features.Menus.Menu;
 
 namespace GRIDWATCH;
 
@@ -37,8 +36,8 @@ public class Main : Plugin
             Info("Setting up INI File...");
             IniFileSetup();
 
-            Info("Creating Menu...");
-            CreateMenu();
+            Info("Creating Menus...");
+            MenuManager.Init();
             
             Info("Initializing Event Consumers...");
             EventConsumers.Initialize();
