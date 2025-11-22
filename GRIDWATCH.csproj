@@ -88,6 +88,7 @@
         <Compile Include="Main.cs" />
         <Compile Include="Native\Enums\WeatherType.cs" />
         <Compile Include="Native\Extensions\EntityExtensions.cs" />
+        <Compile Include="Native\Extensions\EnumExtensions.cs" />
         <Compile Include="Native\Extensions\VectorExtensions.cs" />
         <Compile Include="Native\GlobalVars.cs" />
         <Compile Include="Native\NativeWrapper.cs" />
