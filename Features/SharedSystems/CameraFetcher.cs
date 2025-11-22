@@ -56,18 +56,16 @@ internal static class CameraFetcher
                 // camera model check
                 for (int i = 0; i < CameraProps.Length; i++)
                 {
-                    if (CameraProps[i] == h)
+                    if (CameraProps[i] != h) continue;
+                    float distSq = e.Position.DistanceToSquared(position);
+
+                    if (distSq < nearestDistSq)
                     {
-                        float distSq = e.Position.DistanceToSquared(position);
-
-                        if (distSq < nearestDistSq)
-                        {
-                            nearestDistSq = distSq;
-                            nearest = e;
-                        }
-
-                        break;
+                        nearestDistSq = distSq;
+                        nearest = e;
                     }
+
+                    break;
                 }
             }
 
