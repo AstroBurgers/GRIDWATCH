@@ -1,4 +1,6 @@
-﻿namespace GRIDWATCH.Features.Shotspotter;
+﻿using GRIDWATCH.Native.Extensions;
+
+namespace GRIDWATCH.Features.Shotspotter;
 
 internal static class SpawnProcess
 {
@@ -53,7 +55,7 @@ internal static class SpawnProcess
             switch (Rndm.Next(0, 101))
             {
                 case <= 50:
-                    shooter.Tasks.FightAgainst(shooter.GetNearbyPeds(16).OrderBy(p => p.Position.DistanceTo(shooter.Position)).FirstOrDefault(), 30000).WaitForCompletion();
+                    shooter.Tasks.FightAgainst(shooter.GetNearbyPeds(16).OrderBy(p => p.Position.DistanceToSquared(shooter.Position)).FirstOrDefault(), 30000).WaitForCompletion();
                     shooter.Tasks.Wander();
                     break;
                 case >= 49:

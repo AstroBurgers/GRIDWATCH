@@ -1,4 +1,6 @@
-﻿namespace GRIDWATCH.Features.SharedSystems;
+﻿using GRIDWATCH.Native.Extensions;
+
+namespace GRIDWATCH.Features.SharedSystems;
 
 internal static class CameraFetcher
 {
@@ -44,7 +46,7 @@ internal static class CameraFetcher
             Debug($"Fetched {worldCameras.Count} cameras for nearest search");
 
             var nearestCamera = worldCameras
-                .OrderBy(cam => cam.Position.DistanceTo(position))
+                .OrderBy(cam => cam.Position.DistanceToSquared(position))
                 .FirstOrDefault();
 
             return nearestCamera;

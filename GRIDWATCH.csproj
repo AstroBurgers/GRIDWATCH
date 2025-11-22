@@ -52,8 +52,8 @@
         <Reference Include="RAGENativeUI">
           <HintPath>C:\References\RAGENativeUI.dll</HintPath>
         </Reference>
-        <Reference Include="RagePluginHook">
-          <HintPath>C:\References\RagePluginHookSDK.dll</HintPath>
+        <Reference Include="RagePluginHook, Version=0.0.0.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>packages\RagePluginHook.1.109.1\lib\net472\RagePluginHook.dll</HintPath>
         </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>
@@ -87,6 +87,8 @@
         <Compile Include="Features\Shotspotter\SpawnProcess.cs" />
         <Compile Include="Main.cs" />
         <Compile Include="Native\Enums\WeatherType.cs" />
+        <Compile Include="Native\Extensions\EntityExtensions.cs" />
+        <Compile Include="Native\Extensions\VectorExtensions.cs" />
         <Compile Include="Native\GlobalVars.cs" />
         <Compile Include="Native\NativeWrapper.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
