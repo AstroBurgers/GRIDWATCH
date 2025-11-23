@@ -25,7 +25,7 @@ internal abstract class DynamicDataMenu<T>
         Menu.OnMenuOpen += _ => PopulateMenu();
     }
 
-    public void AttachTo(UIMenu parent, string label)
+    internal void AttachTo(UIMenu parent, string label)
     {
         parent.AddItem(new UIMenuItem(label));
         parent.BindMenuToItem(Menu, parent.MenuItems[parent.MenuItems.Count - 1]);

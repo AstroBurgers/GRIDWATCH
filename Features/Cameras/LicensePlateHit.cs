@@ -57,5 +57,5 @@ public readonly struct LicensePlateHit(
     /// <summary>
     /// Gets an additional message or note related to the license plate hit.
     /// </summary>
-    public string Message { get; } = message;
+    internal string Message { get; } = message;
 }

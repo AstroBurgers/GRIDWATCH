@@ -7,7 +7,7 @@ internal static class MenuManager
     private static readonly MenuPool MenuPool = new();
     private static readonly UIMenu MainMenu = new("GRIDWATCH", "Main Menu");
 
-    public static void Init()
+    internal static void Init()
     {
         MenuPool.Add(MainMenu);
         MainMenu.MouseControlsEnabled = false;

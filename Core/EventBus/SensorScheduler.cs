@@ -6,9 +6,9 @@ internal static class SensorScheduler
 {
     private static readonly List<ISensor> Sensors = [];
 
-    public static void Register(ISensor sensor) => Sensors.Add(sensor);
+    internal static void Register(ISensor sensor) => Sensors.Add(sensor);
 
-    public static void Run()
+    internal static void Run()
     {
         GameFiber.StartNew(Start, "GRIDWATCH Sensor Scheduler");
     }
