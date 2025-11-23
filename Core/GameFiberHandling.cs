@@ -8,7 +8,7 @@ internal static class GameFiberHandling
     {
         GameFiber.StartNew(() =>
         {
-            // Debug("Cleaning up running GameFibers...");
+            Info("Cleaning up running GameFibers...");
             ActiveGameFibers.RemoveWhere(fiber =>
             {
                 if (!fiber.IsAlive) return false;

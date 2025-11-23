@@ -1,4 +1,5 @@
-﻿using static GRIDWATCH.Features.Alerts.SharedMethods;
+﻿using GRIDWATCH.Native.Extensions;
+using static GRIDWATCH.Features.Alerts.SharedMethods;
 
 namespace GRIDWATCH.Features.Cameras;
 
@@ -17,8 +18,7 @@ internal class ScanManager : ISensor
                 if (!veh.Exists() || ScannedVehicles.ContainsKey(veh))
                     continue;
 
-                var distance = veh.DistanceTo(cam.Position);
-                if (distance >= 50f || !HasEntityClearLosToEntity(cam, veh) || !veh.Driver.Exists())
+                if (!veh.IsNear(cam, 50f) || !HasEntityClearLosToEntity(cam, veh) || !veh.Driver.Exists())
                     continue;
 
                 if (!ShouldReadPlate(veh))

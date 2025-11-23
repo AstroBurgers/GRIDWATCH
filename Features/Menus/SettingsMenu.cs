@@ -48,7 +48,7 @@ internal sealed class SettingsMenu
 
     #endregion
 
-    public SettingsMenu()
+    internal SettingsMenu()
     {
         Menu = new UIMenu("Settings", "GRIDWATCH Configuration")
         {
@@ -62,7 +62,7 @@ internal sealed class SettingsMenu
         Menu.OnItemSelect += OnItemSelect;
     }
 
-    public void AttachTo(UIMenu parent, string label)
+    internal void AttachTo(UIMenu parent, string label)
     {
         var item = new UIMenuItem(label);
         parent.AddItem(item);

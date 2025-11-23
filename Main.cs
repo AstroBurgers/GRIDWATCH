@@ -13,7 +13,7 @@ namespace GRIDWATCH;
 public class Main : Plugin
 {
     internal static bool OnDuty;
-    
+
     /// <summary>
     /// LSPD First Response calls this method when the plugin is initialized.
     /// </summary>
@@ -22,41 +22,37 @@ public class Main : Plugin
         Normal("Plugin initialized, go on duty to fully load plugin.");
         Functions.OnOnDutyStateChanged += Functions_OnDutyStateChanged;
     }
-    
+
     private static void Functions_OnDutyStateChanged(bool onDuty)
     {
         OnDuty = onDuty;
 
         if (!onDuty)
             return;
+        Info("Officer is now on duty, loading GRIDWATCH...");
+        Info("Setting up INI File...");
+        IniFileSetup();
 
-        GameFiber.StartNew(() =>
-        {
-            Info("Officer is now on duty, loading GRIDWATCH...");
-            Info("Setting up INI File...");
-            IniFileSetup();
+        Info("Creating Menus...");
+        MenuManager.Init();
 
-            Info("Creating Menus...");
-            MenuManager.Init();
-            
-            Info("Initializing Event Consumers...");
-            EventConsumers.Initialize();
+        Info("Initializing Event Consumers...");
+        EventConsumers.Initialize();
 
-            Info("Registering Sensors...");
-            SensorScheduler.Register(new ScanManager());
+        Info("Registering Sensors...");
+        SensorScheduler.Register(new ScanManager());
 
-            Info("Starting Sensor Scheduler and Shotspotter Spawn Process...");
-            GameFiberHandling.ActiveGameFibers.Add(GameFiber.StartNew(SensorScheduler.Run));
-            GameFiberHandling.ActiveGameFibers.Add(GameFiber.StartNew(SpawnProcess.Start));
+        Info("Starting Sensor Scheduler and Shotspotter Spawn Process...");
+        SensorScheduler.Run();
+        SpawnProcess.Start();
 
-            Info("Plugin loaded successfully, scanning activated!");
-            SharedMethods.DisplayGridwatchAlert(
-                "GRIDWATCH",
-                "Plugin loaded ~g~successfully~s~, scanning activated!"
-            );
+        Info("Plugin loaded successfully, scanning activated!");
+        SharedMethods.DisplayGridwatchAlert(
+            "GRIDWATCH",
+            "Plugin loaded ~g~successfully~s~, scanning activated!"
+        );
 
-            AppDomain.CurrentDomain.DomainUnload += Cleanup;
-        });
+        AppDomain.CurrentDomain.DomainUnload += Cleanup;
     }
 
     /// <summary>
@@ -71,7 +67,7 @@ public class Main : Plugin
 
         Info("Unloaded successfully!");
     }
-    
+
     /// <summary>
     /// LSPD First Response calls this method when the plugin is unloaded.
     /// </summary>
