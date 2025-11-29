@@ -27,6 +27,8 @@ internal static class BlipHandler
 
     internal static void CreateTimedBlip(Vector3 position, Color color, string name, int durationMs)
     {
+        if (!UserConfig.EnableBlips || durationMs <= 0)
+            return;
         GameFiber.StartNew(() =>
             {
                 var blip = new Blip(position, 50f)

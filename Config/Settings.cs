@@ -49,6 +49,9 @@ internal class Config
     [IniReflectorValue(sectionName: "General_Settings", defaultValue: 5)]
     public int MaxCamerasPerScan;
 
+    [IniReflectorValue(sectionName: "General_Settings", defaultValue: true)]
+    public bool EnableBlips;
+    
     [IniReflectorValue(sectionName: "General_Settings", defaultValue: Keys.O)]
     public Keys MenuKey;
 
