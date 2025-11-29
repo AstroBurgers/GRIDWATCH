@@ -8,7 +8,7 @@ namespace GRIDWATCH.Features.Menus;
 internal sealed class LicensePlateHitsMenu() : DynamicDataMenu<LicensePlateHit>("License Plate Hits",
     EventConsumers.GetAllAlprHits,
     "No license plate hits logged yet.",
-    EventConsumers.ClearAlprHits)
+    EventConsumers.ClearAlprHits, Alerts.BlipType.Shotspotter)
 {
     protected override UIMenuItem BuildItem(LicensePlateHit hit)
     {
@@ -21,7 +21,7 @@ internal sealed class LicensePlateHitsMenu() : DynamicDataMenu<LicensePlateHit>(
 internal sealed class ShotspotterMenu() : DynamicDataMenu<GunfireIncident>("Shotspotter Incidents",
     EventConsumers.GetAllGunfireIncidents,
     "No gunfire reports available.",
-    EventConsumers.ClearGunfireIncidents)
+    EventConsumers.ClearGunfireIncidents, Alerts.BlipType.Shotspotter)
 {
     protected override UIMenuItem BuildItem(GunfireIncident incident)
     {

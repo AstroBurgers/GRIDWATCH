@@ -1,31 +1,59 @@
 ﻿using System.Drawing;
+using Debug = System.Diagnostics.Debug;
 
 namespace GRIDWATCH.Features.Alerts;
 
+internal enum BlipType
+{
+    Shotspotter,
+    ALPR
+}
+
 internal static class BlipHandler
 {
-    internal static readonly HashSet<Blip> ActiveBlips = [];
+    internal static readonly Dictionary<Blip, BlipType> ActiveBlips = [];
 
-    internal static void CleanupBlips()
+    internal static void CleanupBlips(BlipType? type = null)
     {
-        Debug("Cleaning up active blips...");
+        Debug(type.HasValue
+            ? $"Cleaning up active blips of type {type}..."
+            : "Cleaning up all active blips...");
 
-        foreach (var blip in ActiveBlips.Where(b => b.Exists()).ToList())
+        // Snapshot to avoid modifying while enumerating
+        var snapshot = ActiveBlips.ToArray();
+
+        foreach (var kv in snapshot)
         {
+            var blip = kv.Key;
+            var blipType = kv.Value;
+
+            if (type.HasValue && blipType != type.Value)
+                continue;
+
+            // Skip dead/null references
+            if (blip == null || !blip.Exists())
+            {
+                Debug.Assert(blip != null, nameof(blip) + " != null");
+                ActiveBlips.Remove(blip);
+                continue;
+            }
+
             try
             {
                 blip.Delete();
             }
             catch (Exception ex)
             {
-                Debug($"Exception deleting blip: {ex.Message}");
+                Debug($"[CleanupBlips] Exception deleting {blipType} blip: {ex.Message}");
+            }
+            finally
+            {
+                ActiveBlips.Remove(blip);
             }
         }
-
-        ActiveBlips.Clear();
     }
-
-    internal static void CreateTimedBlip(Vector3 position, Color color, string name, int durationMs)
+    
+    internal static void CreateTimedBlip(Vector3 position, Color color, string name, int durationMs, BlipType type)
     {
         if (!UserConfig.EnableBlips || durationMs <= 0)
             return;
@@ -39,7 +67,7 @@ internal static class BlipHandler
                 };
 
                 blip.Flash(500, durationMs);
-                ActiveBlips.Add(blip);
+                ActiveBlips.Add(blip, type);
 
                 GameFiber.Wait(durationMs);
 

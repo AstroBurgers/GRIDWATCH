@@ -30,7 +30,7 @@ internal static class MenuManager
         shotspotterMenu.Menu.MouseControlsEnabled = false;
         shotspotterMenu.Menu.AllowCameraMovement = true;
         
-        MenuPool.Add(settingsMenu.Menu, alprMenu.Menu, shotspotterMenu.Menu);
+        MenuPool.Add(alprMenu.Menu, shotspotterMenu.Menu, settingsMenu.Menu);
         
         GameFiber.StartNew(ProcessMenuLoop, "GRIDWATCH Menu Handler");
     }

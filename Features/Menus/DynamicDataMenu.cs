@@ -10,18 +10,22 @@ internal abstract class DynamicDataMenu<T>
     protected readonly Func<List<T>> DataFetcher;
     protected readonly string NoDataMessage;
     protected readonly Action ClearAction;
+    protected readonly BlipType? BlipType;
     
     
     protected DynamicDataMenu(
         string title,
         Func<List<T>> dataFetcher,
         string noDataMessage,
-        Action clearAction)
+        Action clearAction,
+        BlipType? blipType = null)
     {
-        Menu = new(title, "");
+        Menu = new UIMenu(title, "");
         DataFetcher = dataFetcher;
         NoDataMessage = noDataMessage;
         ClearAction = clearAction;
+        BlipType = blipType;
+        
         Menu.OnMenuOpen += _ => PopulateMenu();
     }
 
@@ -31,7 +35,7 @@ internal abstract class DynamicDataMenu<T>
         parent.BindMenuToItem(Menu, parent.MenuItems[parent.MenuItems.Count - 1]);
     }
 
-    protected virtual void PopulateMenu()
+    private void PopulateMenu()
     {
         Menu.Clear();
         var data = DataFetcher() ?? [];
@@ -52,6 +56,8 @@ internal abstract class DynamicDataMenu<T>
         clear.Activated += (_, _) =>
         {
             ClearAction?.Invoke();
+            if (BlipType.HasValue)
+                BlipHandler.CleanupBlips(BlipType.Value);
             PopulateMenu();
             Game.DisplayNotification("commonmenu", "shop_tick_icon",
                 "GRIDWATCH", $"{Menu.SubtitleText} Logs", "Cleared.");
