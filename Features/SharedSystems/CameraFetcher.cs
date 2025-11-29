@@ -26,7 +26,7 @@ internal static class CameraFetcher
                     WorldCameras.Add(e);
                 }
             }
-
+            
             Debug($"Fetched {WorldCameras.Count} cameras");
 
             // Randomize and pick up to the user configured max number of cameras

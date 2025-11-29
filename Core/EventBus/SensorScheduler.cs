@@ -17,14 +17,14 @@ internal static class SensorScheduler
     {
         while (true)
         {
+            GameFiber.Wait(UserConfig.ScanInterval);
             if (LSPD_First_Response.Mod.API.Functions.IsPlayerPerformingPullover()) {
                 continue;
             }
             var cameras = CameraFetcher.FetchNearbyCameras();
             foreach (var s in Sensors) s.Tick(cameras);
-
-            GameFiber.Wait(UserConfig.ScanInterval);
         }
+        // ReSharper disable once FunctionNeverReturns
     }
 }
 
