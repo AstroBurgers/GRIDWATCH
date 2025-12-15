@@ -1,4 +1,5 @@
 ﻿using GRIDWATCH.Features.SharedSystems;
+using LSPD_First_Response.Mod.API;
 
 namespace GRIDWATCH.Core.EventBus;
 
@@ -6,7 +7,10 @@ internal static class SensorScheduler
 {
     private static readonly List<ISensor> Sensors = [];
 
-    internal static void Register(ISensor sensor) => Sensors.Add(sensor);
+    internal static void Register(ISensor sensor)
+    {
+        Sensors.Add(sensor);
+    }
 
     internal static void Run()
     {
@@ -18,11 +22,9 @@ internal static class SensorScheduler
         while (true)
         {
             GameFiber.Wait(UserConfig.ScanInterval);
-            if (LSPD_First_Response.Mod.API.Functions.IsPlayerPerformingPullover()) {
-                continue;
-            }
-            var cameras = CameraFetcher.FetchNearbyCameras();
-            foreach (var s in Sensors) s.Tick(cameras);
+            if (Functions.IsPlayerPerformingPullover()) continue;
+            List<Entity> cameras = CameraFetcher.FetchNearbyCameras();
+            foreach (ISensor s in Sensors) s.Tick(cameras);
         }
         // ReSharper disable once FunctionNeverReturns
     }

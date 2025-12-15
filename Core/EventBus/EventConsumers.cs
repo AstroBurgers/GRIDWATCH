@@ -1,7 +1,9 @@
 ﻿using System.Drawing;
 using GRIDWATCH.Features.Cameras;
 using GRIDWATCH.Features.Shotspotter;
+using LSPD_First_Response.Mod.API;
 using static GRIDWATCH.Features.Alerts.BlipHandler;
+using Events = GRIDWATCH.API.Events;
 
 namespace GRIDWATCH.Core.EventBus;
 
@@ -19,28 +21,28 @@ internal static class EventConsumers
     private static void OnGunfireIncident(GunfireIncident shot)
     {
         SharedMethods.DisplayGridwatchAlert("SHOTSPOTTER ALERT",
-            $"Possible shooting detected on ~r~{World.GetStreetName(shot.Location)}~s~ in ~b~{LSPD_First_Response.Mod.API.Functions.GetZoneAtPosition(shot.Location)
+            $"Possible shooting detected on ~r~{World.GetStreetName(shot.Location)}~s~ in ~b~{Functions.GetZoneAtPosition(shot.Location)
                 ?.RealAreaName ?? "Unknown"}~s~");
-        
+
         CreateTimedBlip(shot.Location, Color.OrangeRed, $"GRIDWATCH Alert: Shotspotter {shot.Timestamp}",
-            30000, BlipType.Shotspotter);
-        
+            UserConfig.BlipDuration, BlipType.Shotspotter);
+
         GunfireIncidents.Add(shot);
-        API.Events.GunfireIncidentAdded(shot);
+        Events.GunfireIncidentAdded(shot);
     }
 
     private static void OnPlateHit(LicensePlateHit hit)
     {
         SharedMethods.DisplayGridwatchAlert(
-            type: "ALPR ALERT",
-            message: hit.Message
+            "ALPR ALERT",
+            hit.Message
         );
-        
+
         CreateTimedBlip(hit.Location, Color.Red, $"GRIDWATCH Alert: {hit.LicensePlate}",
-            30000, BlipType.ALPR);
-        
+            UserConfig.BlipDuration, BlipType.ALPR, hit.Vehicle);
+
         AlprHits.Add(hit);
-        API.Events.LicensePlateHitAdded(hit);
+        Events.LicensePlateHitAdded(hit);
     }
 
 
@@ -58,7 +60,7 @@ internal static class EventConsumers
     {
         AlprHits.Clear();
     }
-    
+
     internal static void ClearGunfireIncidents()
     {
         GunfireIncidents.Clear();

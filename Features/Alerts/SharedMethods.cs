@@ -1,5 +1,6 @@
 ﻿using CommonDataFramework.Modules.VehicleDatabase;
 using GRIDWATCH.Features.Cameras;
+using LSPD_First_Response.Mod.API;
 
 namespace GRIDWATCH.Features.Alerts;
 
@@ -17,42 +18,45 @@ internal static class SharedMethods
 
     internal static void ProcessPlate(Entity camera, Vehicle vehicle)
     {
-        var vehData = vehicle.GetVehicleData();
+        VehicleData vehData = vehicle.GetVehicleData();
         if (vehData == null)
             return;
 
         static string FormatFlag(bool condition, string text, string color)
-            => condition ? $"{color}[{text}]~s~ " : string.Empty;
+        {
+            return condition ? $"{color}[{text}]~s~ " : string.Empty;
+        }
 
-        var stolen = FormatFlag(vehData.IsStolen, "STOLEN", "~r~");
-        var bolo = FormatFlag(vehData.HasAnyBOLOs, "BOLO", "~o~");
-        var wanted = FormatFlag(vehData.Owner.Wanted, "WANTED", "~b~");
+        string stolen = FormatFlag(vehData.IsStolen, "STOLEN", "~r~");
+        string bolo = FormatFlag(vehData.HasAnyBOLOs, "BOLO", "~o~");
+        string wanted = FormatFlag(vehData.Owner.Wanted, "WANTED", "~b~");
 
         // Skip if no meaningful flags
         if (string.IsNullOrWhiteSpace(stolen + bolo + wanted))
             return;
 
-        var zone =
-            LSPD_First_Response.Mod.API.Functions.GetZoneAtPosition(camera.Position)
+        string zone =
+            Functions.GetZoneAtPosition(camera.Position)
                 ?.RealAreaName ?? "Unknown";
-        var make = GetMakeNameFromVehicleModel(Game.GetHashKey(vehicle.Model.Name));
-        var model = vehicle.Model.Name ?? "N/A";
-        var plate = vehicle.LicensePlate ?? "UNREADABLE";
-        var primary = vehData.PrimaryColor ?? "UNK";
-        var secondary = vehData.SecondaryColor ?? "UNK";
+        string make = GetMakeNameFromVehicleModel(Game.GetHashKey(vehicle.Model.Name));
+        string model = vehicle.Model.Name ?? "N/A";
+        string plate = vehicle.LicensePlate ?? "UNREADABLE";
+        string primary = vehData.PrimaryColor ?? "UNK";
+        string secondary = vehData.SecondaryColor ?? "UNK";
 
-        var colors = primary == secondary
+        string colors = primary == secondary
             ? $"~y~{primary}~s~"
             : $"~y~{primary}~s~ / ~y~{secondary}~s~";
 
-        var message =
+        string message =
             $"~b~Camera Zone:~s~ {zone}\n" +
             $"~b~License Plate:~s~ ~y~{plate}~s~\n" +
             $"~b~Vehicle:~s~ ~y~{make} {model}~s~\n" +
             $"~b~Color:~s~ {colors}\n" +
             $"~b~Flags:~s~ {stolen}{bolo}{wanted}";
 
-        var plateHit = new LicensePlateHit(
+        LicensePlateHit plateHit = new(
+            vehicle,
             camera.Position,
             plate,
             make,

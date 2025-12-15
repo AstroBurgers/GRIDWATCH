@@ -7,7 +7,7 @@ using LSPD_First_Response.Mod.API;
 namespace GRIDWATCH;
 
 /// <summary>
-/// Main plugin class for GRIDWATCH.
+///     Main plugin class for GRIDWATCH.
 /// </summary>
 [UsedImplicitly]
 public class Main : Plugin
@@ -15,7 +15,7 @@ public class Main : Plugin
     internal static bool OnDuty;
 
     /// <summary>
-    /// LSPD First Response calls this method when the plugin is initialized.
+    ///     LSPD First Response calls this method when the plugin is initialized.
     /// </summary>
     public override void Initialize()
     {
@@ -46,6 +46,24 @@ public class Main : Plugin
         SensorScheduler.Run();
         SpawnProcess.Start();
 
+        GameFiber.StartNew(() =>
+        {
+            new VersionChecker(Assembly.GetExecutingAssembly()).OnCompleted += (_, e) =>
+            {
+                bool updateAvailable = e.UpdateAvailable;
+                Version latestVersion = e.LatestVersion;
+
+                if (updateAvailable)
+                    SharedMethods.DisplayGridwatchAlert(
+                        "GRIDWATCH",
+                        $"Plugin is ~r~out of to date~s~!\n" +
+                        $"Online Version: ~g~{latestVersion}~s~\n" +
+                        $"Installed version: ~y~{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}~s~\n" +
+                        $"Please update ~r~ASAP~s~!"
+                    );
+            };
+        }, "GRIDWATCH Version Checker");
+
         Info("Plugin loaded successfully, scanning activated!");
         SharedMethods.DisplayGridwatchAlert(
             "GRIDWATCH",
@@ -56,8 +74,8 @@ public class Main : Plugin
     }
 
     /// <summary>
-    /// Called when the AppDomain is unloaded to perform cleanup. Fires AFTER LSPD First Response's Finally method.
-    /// Better to use this instead of Finally, since Finally does not fire if the plugin is unloaded due to an error.
+    ///     Called when the AppDomain is unloaded to perform cleanup. Fires AFTER LSPD First Response's Finally method.
+    ///     Better to use this instead of Finally, since Finally does not fire if the plugin is unloaded due to an error.
     /// </summary>
     private static void Cleanup(object sender, EventArgs e)
     {
@@ -69,7 +87,7 @@ public class Main : Plugin
     }
 
     /// <summary>
-    /// LSPD First Response calls this method when the plugin is unloaded.
+    ///     LSPD First Response calls this method when the plugin is unloaded.
     /// </summary>
     public override void Finally()
     {

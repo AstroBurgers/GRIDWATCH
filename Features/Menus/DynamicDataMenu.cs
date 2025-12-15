@@ -6,13 +6,13 @@ namespace GRIDWATCH.Features.Menus;
 
 internal abstract class DynamicDataMenu<T>
 {
-    internal readonly UIMenu Menu;
-    protected readonly Func<List<T>> DataFetcher;
-    protected readonly string NoDataMessage;
-    protected readonly Action ClearAction;
     protected readonly BlipType? BlipType;
-    
-    
+    protected readonly Action ClearAction;
+    protected readonly Func<List<T>> DataFetcher;
+    internal readonly UIMenu Menu;
+    protected readonly string NoDataMessage;
+
+
     protected DynamicDataMenu(
         string title,
         Func<List<T>> dataFetcher,
@@ -25,7 +25,7 @@ internal abstract class DynamicDataMenu<T>
         NoDataMessage = noDataMessage;
         ClearAction = clearAction;
         BlipType = blipType;
-        
+
         Menu.OnMenuOpen += _ => PopulateMenu();
     }
 
@@ -38,17 +38,17 @@ internal abstract class DynamicDataMenu<T>
     private void PopulateMenu()
     {
         Menu.Clear();
-        var data = DataFetcher() ?? [];
+        List<T> data = DataFetcher() ?? [];
         if (data.Count == 0)
         {
             Menu.AddItem(new UIMenuItem("No Entries", NoDataMessage));
             return;
         }
 
-        foreach (var item in data)
+        foreach (T item in data)
             Menu.AddItem(BuildItem(item));
 
-        var clear = new UIMenuItem("Clear", "Delete all entries.")
+        UIMenuItem clear = new("Clear", "Delete all entries.")
         {
             BackColor = Color.Red,
             HighlightedBackColor = Color.DarkRed

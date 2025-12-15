@@ -1,6 +1,4 @@
-﻿using GRIDWATCH.Native.Extensions;
-
-namespace GRIDWATCH.Features.Shotspotter;
+﻿namespace GRIDWATCH.Features.Shotspotter;
 
 internal static class SpawnProcess
 {
@@ -29,10 +27,12 @@ internal static class SpawnProcess
                 // Simulate random gunfire activity
                 if (Rndm.Next(0, 100) <= UserConfig.ShotspotterChance)
                 {
-                    if (Rndm.Next(0, 100) <= UserConfig.ShotspotterFalseAlarmChance) {
+                    if (Rndm.Next(0, 100) <= UserConfig.ShotspotterFalseAlarmChance)
+                    {
                         SpawnFalseGunfireIncident();
                         return;
                     }
+
                     SpawnGunfireIncident();
                 }
 
@@ -46,17 +46,23 @@ internal static class SpawnProcess
         try
         {
             // choose a random location near the player
-            var pos = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(500f));
+            Vector3 pos = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(500f));
 
             // spawn a shooter with random facing
-            var shooter = new Ped(pos, Rndm.Next(0, 360));
+            Ped shooter = new(pos, Rndm.Next(0, 360));
             shooter.Inventory.GiveNewWeapon(GunTypes[Rndm.Next(GunTypes.Length)], -1, true);
 
             switch (Rndm.Next(0, 101))
             {
                 case <= 50:
-                    var nearbyPeds = shooter.GetNearbyPeds(16);
-                    var victim = nearbyPeds[0];
+                    Ped[] nearbyPeds = shooter.GetNearbyPeds(16);
+                    if (nearbyPeds.Length == 0)
+                    {
+                        Warn("No nearby peds found for shooter to attack. Falling back to wandering.");
+                        shooter.Tasks.Wander();
+                        break;
+                    }
+                    Ped victim = nearbyPeds[0];
                     shooter.Tasks.FightAgainst(victim, 30000).WaitForCompletion();
                     shooter.Tasks.Wander();
                     break;
@@ -65,10 +71,10 @@ internal static class SpawnProcess
                     break;
             }
 
-            var incident = new GunfireIncident(
-                loc: pos,
-                shooter: shooter,
-                weapon: shooter.Inventory.EquippedWeapon.ToString()
+            GunfireIncident incident = new(
+                pos,
+                shooter,
+                shooter.Inventory.EquippedWeapon.ToString()
             );
 
             EventHub.Publish(incident);
@@ -84,12 +90,12 @@ internal static class SpawnProcess
         try
         {
             // choose a random location near the player
-            var pos = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(500f));
+            Vector3 pos = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(500f));
 
-            var incident = new GunfireIncident(
-                loc: pos,
-                shooter: null,
-                weapon: string.Empty
+            GunfireIncident incident = new(
+                pos,
+                null,
+                string.Empty
             );
 
             EventHub.Publish(incident);

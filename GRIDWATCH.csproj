@@ -37,65 +37,67 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="CommonDataFramework">
-          <HintPath>C:\References\CommonDataFramework.dll</HintPath>
+            <HintPath>C:\References\CommonDataFramework.dll</HintPath>
         </Reference>
         <Reference Include="JetBrains.Annotations, Version=4242.42.42.42, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-          <HintPath>packages\JetBrains.Annotations.2025.2.2\lib\net20\JetBrains.Annotations.dll</HintPath>
+            <HintPath>packages\JetBrains.Annotations.2025.2.2\lib\net20\JetBrains.Annotations.dll</HintPath>
         </Reference>
         <Reference Include="LSPD First Response">
-          <HintPath>C:\References\LSPD First Response.dll</HintPath>
+            <HintPath>C:\References\LSPD First Response.dll</HintPath>
         </Reference>
-        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="Microsoft.CSharp"/>
         <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-          <HintPath>packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+            <HintPath>packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
         </Reference>
         <Reference Include="RAGENativeUI">
-          <HintPath>C:\References\RAGENativeUI.dll</HintPath>
+            <HintPath>C:\References\RAGENativeUI.dll</HintPath>
         </Reference>
         <Reference Include="RagePluginHook, Version=0.0.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>packages\RagePluginHook.1.109.1\lib\net472\RagePluginHook.dll</HintPath>
+            <HintPath>packages\RagePluginHook.1.109.1\lib\net472\RagePluginHook.dll</HintPath>
         </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
-        <Reference Include="System.Drawing" />
-        <Reference Include="System.Windows.Forms" />
+        <Reference Include="System.Drawing"/>
+        <Reference Include="System.Net.Http"/>
+        <Reference Include="System.Windows.Forms"/>
         <Reference Include="System.Xml"/>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="API\Events.cs" />
-        <Compile Include="API\Functions.cs" />
-        <Compile Include="Config\CamerasIOHandler.cs" />
-        <Compile Include="Config\IniReflector.cs" />
-        <Compile Include="Config\Settings.cs" />
-        <Compile Include="Core\EventBus\EventConsumers.cs" />
-        <Compile Include="Core\EventBus\EventHub.cs" />
-        <Compile Include="Core\EventBus\SensorScheduler.cs" />
-        <Compile Include="Core\GameFiberHandling.cs" />
-        <Compile Include="Core\GlobalUsings.cs" />
-        <Compile Include="Core\Logger.cs" />
-        <Compile Include="Features\Alerts\BlipHandler.cs" />
-        <Compile Include="Features\Alerts\SharedMethods.cs" />
-        <Compile Include="Features\Cameras\LicensePlateHit.cs" />
-        <Compile Include="Features\Cameras\ScanManager.cs" />
-        <Compile Include="Features\Menus\DynamicDataMenu.cs" />
-        <Compile Include="Features\Menus\DynamicMenus.cs" />
-        <Compile Include="Features\Menus\MenuManager.cs" />
-        <Compile Include="Features\Menus\SettingsMenu.cs" />
-        <Compile Include="Features\SharedSystems\CameraFetcher.cs" />
-        <Compile Include="Features\Shotspotter\GunfireIncident.cs" />
-        <Compile Include="Features\Shotspotter\SpawnProcess.cs" />
-        <Compile Include="Main.cs" />
-        <Compile Include="Native\Enums\WeatherType.cs" />
-        <Compile Include="Native\Extensions\EntityExtensions.cs" />
-        <Compile Include="Native\Extensions\EnumExtensions.cs" />
-        <Compile Include="Native\Extensions\VectorExtensions.cs" />
-        <Compile Include="Native\GlobalVars.cs" />
-        <Compile Include="Native\NativeWrapper.cs" />
+        <Compile Include="API\Events.cs"/>
+        <Compile Include="API\Functions.cs"/>
+        <Compile Include="Config\CamerasIOHandler.cs"/>
+        <Compile Include="Config\IniReflector.cs"/>
+        <Compile Include="Config\Settings.cs"/>
+        <Compile Include="Core\EventBus\EventConsumers.cs"/>
+        <Compile Include="Core\EventBus\EventHub.cs"/>
+        <Compile Include="Core\EventBus\SensorScheduler.cs"/>
+        <Compile Include="Core\GameFiberHandling.cs"/>
+        <Compile Include="Core\GlobalUsings.cs"/>
+        <Compile Include="Core\Logger.cs"/>
+        <Compile Include="Core\VersionChecker.cs"/>
+        <Compile Include="Features\Alerts\BlipHandler.cs"/>
+        <Compile Include="Features\Alerts\SharedMethods.cs"/>
+        <Compile Include="Features\Cameras\LicensePlateHit.cs"/>
+        <Compile Include="Features\Cameras\ScanManager.cs"/>
+        <Compile Include="Features\Menus\DynamicDataMenu.cs"/>
+        <Compile Include="Features\Menus\DynamicMenus.cs"/>
+        <Compile Include="Features\Menus\MenuManager.cs"/>
+        <Compile Include="Features\Menus\SettingsMenu.cs"/>
+        <Compile Include="Features\SharedSystems\CameraFetcher.cs"/>
+        <Compile Include="Features\Shotspotter\GunfireIncident.cs"/>
+        <Compile Include="Features\Shotspotter\SpawnProcess.cs"/>
+        <Compile Include="Main.cs"/>
+        <Compile Include="Native\Enums\WeatherType.cs"/>
+        <Compile Include="Native\Extensions\EntityExtensions.cs"/>
+        <Compile Include="Native\Extensions\EnumExtensions.cs"/>
+        <Compile Include="Native\Extensions\VectorExtensions.cs"/>
+        <Compile Include="Native\GlobalVars.cs"/>
+        <Compile Include="Native\NativeWrapper.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <ItemGroup>
-      <None Include="packages.config" />
+        <None Include="packages.config"/>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

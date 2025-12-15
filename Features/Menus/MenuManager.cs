@@ -13,9 +13,9 @@ internal static class MenuManager
         MainMenu.MouseControlsEnabled = false;
         MainMenu.AllowCameraMovement = true;
 
-        var settingsMenu = new SettingsMenu();
-        var alprMenu = new LicensePlateHitsMenu();
-        var shotspotterMenu = new ShotspotterMenu();
+        SettingsMenu settingsMenu = new();
+        LicensePlateHitsMenu alprMenu = new();
+        ShotspotterMenu shotspotterMenu = new();
 
         settingsMenu.AttachTo(MainMenu, "Settings");
         alprMenu.AttachTo(MainMenu, "License Plate Hits");
@@ -23,15 +23,15 @@ internal static class MenuManager
 
         settingsMenu.Menu.MouseControlsEnabled = false;
         settingsMenu.Menu.AllowCameraMovement = true;
-        
+
         alprMenu.Menu.MouseControlsEnabled = false;
         alprMenu.Menu.AllowCameraMovement = true;
-        
+
         shotspotterMenu.Menu.MouseControlsEnabled = false;
         shotspotterMenu.Menu.AllowCameraMovement = true;
-        
+
         MenuPool.Add(alprMenu.Menu, shotspotterMenu.Menu, settingsMenu.Menu);
-        
+
         GameFiber.StartNew(ProcessMenuLoop, "GRIDWATCH Menu Handler");
     }
 
@@ -45,9 +45,7 @@ internal static class MenuManager
             if (Game.IsKeyDown(UserConfig.MenuKey) &&
                 (UserConfig.MenuModifierKey == Keys.None ||
                  Game.IsKeyDownRightNow(UserConfig.MenuModifierKey)))
-            {
                 MainMenu.Visible = !MainMenu.Visible;
-            }
         }
     }
 }

@@ -20,12 +20,12 @@ internal static class BlipHandler
             : "Cleaning up all active blips...");
 
         // Snapshot to avoid modifying while enumerating
-        var snapshot = ActiveBlips.ToArray();
+        KeyValuePair<Blip, BlipType>[] snapshot = ActiveBlips.ToArray();
 
-        foreach (var kv in snapshot)
+        foreach (KeyValuePair<Blip, BlipType> kv in snapshot)
         {
-            var blip = kv.Key;
-            var blipType = kv.Value;
+            Blip blip = kv.Key;
+            BlipType blipType = kv.Value;
 
             if (type.HasValue && blipType != type.Value)
                 continue;
@@ -52,19 +52,24 @@ internal static class BlipHandler
             }
         }
     }
-    
-    internal static void CreateTimedBlip(Vector3 position, Color color, string name, int durationMs, BlipType type)
+
+    internal static void CreateTimedBlip(
+        Vector3 position,
+        Color color,
+        string name,
+        int durationMs,
+        BlipType type,
+        Vehicle attachedTo = null)
     {
         if (!UserConfig.EnableBlips || durationMs <= 0)
             return;
+
         GameFiber.StartNew(() =>
             {
-                var blip = new Blip(position, 50f)
-                {
-                    Color = color,
-                    Alpha = 0.5f,
-                    Name = $"{name}"
-                };
+                Blip blip = CreateBlipInstance(position, attachedTo, color, name, type);
+
+                if (blip == null)
+                    return;
 
                 blip.Flash(500, durationMs);
                 ActiveBlips.Add(blip, type);
@@ -72,8 +77,40 @@ internal static class BlipHandler
                 GameFiber.Wait(durationMs);
 
                 ActiveBlips.Remove(blip);
-                blip?.Delete();
-            },
-            $"{name}");
+                blip.DeleteSafe();
+            }, $"{name}");
+    }
+
+    private static Blip CreateBlipInstance(
+        Vector3 position,
+        Vehicle attachedTo,
+        Color color,
+        string name,
+        BlipType type)
+    {
+        bool isTracking = UserConfig.TrackingBlips && type == BlipType.ALPR && attachedTo != null;
+
+        Blip blip = isTracking ? new Blip(attachedTo) : new Blip(position, 50f);
+
+        blip.Color = color;
+        blip.Alpha = 0.5f;
+        blip.Name = isTracking ? $"{name} (Tracking)" : name;
+
+        if (isTracking)
+            blip.Sprite = BlipSprite.GangVehicle;
+
+        return blip;
+    }
+
+    private static void DeleteSafe(this Blip blip)
+    {
+        try
+        {
+            blip?.Delete();
+        }
+        catch
+        {
+            /* no crash for deleted blips */
+        }
     }
 }

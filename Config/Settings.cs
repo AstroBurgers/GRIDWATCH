@@ -9,10 +9,7 @@ internal static class Settings
 
     internal static void IniFileSetup()
     {
-        if (!File.Exists("plugins/LSPDFR/GRIDWATCH.ini"))
-        {
-            File.Create("plugins/LSPDFR/GRIDWATCH.ini").Close();
-        }
+        if (!File.Exists("plugins/LSPDFR/GRIDWATCH.ini")) File.Create("plugins/LSPDFR/GRIDWATCH.ini").Close();
 
         IniReflector.Read(UserConfig, true);
         ValidateIniValues();
@@ -31,33 +28,39 @@ internal static class Settings
 
 internal class Config
 {
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 85)]
-    public int ReadChance;
+    [IniReflectorValue("General_Settings", defaultValue: false)]
+    public bool DebugModeEnabled;
 
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 1500)]
-    public int ScanInterval;
-
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 60000)]
-    public int ShotspotterPollRate;
-
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 5)]
-    public int ShotspotterChance;
-
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 20)]
-    public int ShotspotterFalseAlarmChance;
-
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: 5)]
-    public int MaxCamerasPerScan;
-
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: true)]
+    [IniReflectorValue("General_Settings", defaultValue: true)]
     public bool EnableBlips;
+
+    [IniReflectorValue("General_Settings", defaultValue: 30000)]
+    public int BlipDuration;
     
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: Keys.O)]
+    [IniReflectorValue("General_Settings", defaultValue: true, description:"If true, blips will be smaller, and attached to the scanned vehicle, allowing for continuous tracking.")]
+    public bool TrackingBlips;
+    
+    [IniReflectorValue("General_Settings", defaultValue: 5)]
+    public int MaxCamerasPerScan;
+    
+    [IniReflectorValue("General_Settings", defaultValue: Keys.O)]
     public Keys MenuKey;
 
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: Keys.LControlKey)]
+    [IniReflectorValue("General_Settings", defaultValue: Keys.LControlKey)]
     public Keys MenuModifierKey;
 
-    [IniReflectorValue(sectionName: "General_Settings", defaultValue: false)]
-    public bool DebugModeEnabled;
+    [IniReflectorValue("General_Settings", defaultValue: 85)]
+    public int ReadChance;
+
+    [IniReflectorValue("General_Settings", defaultValue: 5000)]
+    public int ScanInterval;
+
+    [IniReflectorValue("General_Settings", defaultValue: 5)]
+    public int ShotspotterChance;
+
+    [IniReflectorValue("General_Settings", defaultValue: 20)]
+    public int ShotspotterFalseAlarmChance;
+
+    [IniReflectorValue("General_Settings", defaultValue: 60000)]
+    public int ShotspotterPollRate;
 }
