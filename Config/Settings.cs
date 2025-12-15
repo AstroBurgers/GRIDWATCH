@@ -34,9 +34,15 @@ internal class Config
     [IniReflectorValue("General_Settings", defaultValue: true)]
     public bool EnableBlips;
 
+    [IniReflectorValue("General_Settings", defaultValue: true)]
+    public int BlipDuration;
+    
+    [IniReflectorValue("General_Settings", defaultValue: true, description:"If true, blips will be smaller, and attached to the scanned vehicle, allowing for continuous tracking.")]
+    public bool TrackingBlips;
+    
     [IniReflectorValue("General_Settings", defaultValue: 5)]
     public int MaxCamerasPerScan;
-
+    
     [IniReflectorValue("General_Settings", defaultValue: Keys.O)]
     public Keys MenuKey;
 
@@ -46,7 +52,7 @@ internal class Config
     [IniReflectorValue("General_Settings", defaultValue: 85)]
     public int ReadChance;
 
-    [IniReflectorValue("General_Settings", defaultValue: 1500)]
+    [IniReflectorValue("General_Settings", defaultValue: 5000)]
     public int ScanInterval;
 
     [IniReflectorValue("General_Settings", defaultValue: 5)]

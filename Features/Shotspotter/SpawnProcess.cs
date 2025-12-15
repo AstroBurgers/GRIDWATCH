@@ -56,6 +56,12 @@ internal static class SpawnProcess
             {
                 case <= 50:
                     Ped[] nearbyPeds = shooter.GetNearbyPeds(16);
+                    if (nearbyPeds.Length == 0)
+                    {
+                        Warn("No nearby peds found for shooter to attack. Falling back to wandering.");
+                        shooter.Tasks.Wander();
+                        break;
+                    }
                     Ped victim = nearbyPeds[0];
                     shooter.Tasks.FightAgainst(victim, 30000).WaitForCompletion();
                     shooter.Tasks.Wander();
