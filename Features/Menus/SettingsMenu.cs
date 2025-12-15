@@ -42,6 +42,9 @@ internal sealed class SettingsMenu
         Menu.AddItem(_maxCamerasPerScanItem);
         Menu.AddItem(_debugModeItem);
         Menu.AddItem(_saveSettingsItem);
+        Menu.AddItem(_enableBlips);
+        Menu.AddItem(_trackingBlips);
+        Menu.AddItem(_blipDurationItem);
     }
 
     private void LoadConfigValues()
@@ -53,6 +56,9 @@ internal sealed class SettingsMenu
         _shotspotterFalseAlarmChanceItem.Value = UserConfig.ShotspotterFalseAlarmChance;
         _maxCamerasPerScanItem.Value = UserConfig.MaxCamerasPerScan;
         _debugModeItem.Checked = UserConfig.DebugModeEnabled;
+        _enableBlips.Checked = UserConfig.EnableBlips;
+        _trackingBlips.Checked = UserConfig.TrackingBlips;
+        _blipDurationItem.Value = UserConfig.BlipDuration;
     }
 
     private void OnItemSelect(UIMenu sender, UIMenuItem item, int index)
@@ -73,7 +79,10 @@ internal sealed class SettingsMenu
                 _shotspotterFalseAlarmChanceItem.Value);
             Settings.IniReflector.WriteSingle(nameof(UserConfig.MaxCamerasPerScan), _maxCamerasPerScanItem.Value);
             Settings.IniReflector.WriteSingle(nameof(UserConfig.DebugModeEnabled), _debugModeItem.Checked);
-
+            Settings.IniReflector.WriteSingle(nameof(UserConfig.EnableBlips), _enableBlips.Checked);
+            Settings.IniReflector.WriteSingle(nameof(UserConfig.TrackingBlips), _trackingBlips.Checked);
+            Settings.IniReflector.WriteSingle(nameof(UserConfig.BlipDuration), _blipDurationItem.Value);
+            
             // Reload fresh copy into memory
             Settings.IniReflector.Read(UserConfig, true);
 
@@ -131,6 +140,16 @@ internal sealed class SettingsMenu
             BackColor = Color.Green,
             HighlightedBackColor = Color.DarkGreen
         };
+
+    private readonly UIMenuCheckboxItem _enableBlips =
+        new("Enable Blips", false, "Toggle camera blips on/off.");
+
+    private readonly UIMenuCheckboxItem _trackingBlips =
+        new("Enable Tracking Blips", false, "Toggle tracking blips on/off.");
+
+    private readonly UIMenuNumericScrollerItem<int> _blipDurationItem =
+        new(
+            "Blip Duration (MS)", "How long camera blips last.", 1, 600000, 100);
 
     #endregion
 }
