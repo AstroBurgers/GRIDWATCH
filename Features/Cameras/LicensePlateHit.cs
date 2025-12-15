@@ -1,7 +1,7 @@
 ﻿namespace GRIDWATCH.Features.Cameras;
 
 /// <summary>
-/// Represents a license plate hit detected by the system.
+///     Represents a license plate hit detected by the system.
 /// </summary>
 /// <param name="location">The geographical location where the license plate was detected.</param>
 /// <param name="licensePlate">The detected license plate number.</param>
@@ -20,42 +20,42 @@ public readonly struct LicensePlateHit(
     string message)
 {
     /// <summary>
-    /// Gets the geographical location where the license plate was detected.
+    ///     Gets the geographical location where the license plate was detected.
     /// </summary>
     public Vector3 Location { get; } = location;
 
     /// <summary>
-    /// Gets the detected license plate number.
+    ///     Gets the detected license plate number.
     /// </summary>
     public string LicensePlate { get; } = licensePlate;
 
     /// <summary>
-    /// Gets the timestamp when the license plate hit was recorded.
+    ///     Gets the timestamp when the license plate hit was recorded.
     /// </summary>
     public DateTime Timestamp { get; } = DateTime.Now;
 
     /// <summary>
-    /// Gets the make of the vehicle.
+    ///     Gets the make of the vehicle.
     /// </summary>
     public string Make { get; } = make;
 
     /// <summary>
-    /// Gets the model of the vehicle.
+    ///     Gets the model of the vehicle.
     /// </summary>
     public string Model { get; } = model;
 
     /// <summary>
-    /// Gets the primary color of the vehicle.
+    ///     Gets the primary color of the vehicle.
     /// </summary>
     public string PrimaryColor { get; } = primaryColor;
 
     /// <summary>
-    /// Gets the secondary color of the vehicle.
+    ///     Gets the secondary color of the vehicle.
     /// </summary>
     public string SecondaryColor { get; } = secondaryColor;
 
     /// <summary>
-    /// Gets an additional message or note related to the license plate hit.
+    ///     Gets an additional message or note related to the license plate hit.
     /// </summary>
     internal string Message { get; } = message;
 }

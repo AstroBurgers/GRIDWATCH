@@ -20,12 +20,12 @@ internal static class BlipHandler
             : "Cleaning up all active blips...");
 
         // Snapshot to avoid modifying while enumerating
-        var snapshot = ActiveBlips.ToArray();
+        KeyValuePair<Blip, BlipType>[] snapshot = ActiveBlips.ToArray();
 
-        foreach (var kv in snapshot)
+        foreach (KeyValuePair<Blip, BlipType> kv in snapshot)
         {
-            var blip = kv.Key;
-            var blipType = kv.Value;
+            Blip blip = kv.Key;
+            BlipType blipType = kv.Value;
 
             if (type.HasValue && blipType != type.Value)
                 continue;
@@ -52,14 +52,14 @@ internal static class BlipHandler
             }
         }
     }
-    
+
     internal static void CreateTimedBlip(Vector3 position, Color color, string name, int durationMs, BlipType type)
     {
         if (!UserConfig.EnableBlips || durationMs <= 0)
             return;
         GameFiber.StartNew(() =>
             {
-                var blip = new Blip(position, 50f)
+                Blip blip = new(position, 50f)
                 {
                     Color = color,
                     Alpha = 0.5f,

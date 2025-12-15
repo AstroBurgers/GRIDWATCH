@@ -2,6 +2,7 @@
 using GRIDWATCH.Config;
 using RAGENativeUI;
 using RAGENativeUI.Elements;
+
 #pragma warning disable CS0618 // Type or member is obsolete
 
 namespace GRIDWATCH.Features.Menus;
@@ -9,44 +10,6 @@ namespace GRIDWATCH.Features.Menus;
 internal sealed class SettingsMenu
 {
     internal readonly UIMenu Menu;
-
-    #region Settings items
-
-    private readonly UIMenuNumericScrollerItem<int> _readChanceItem =
-        new(
-            "Read Chance", "Chance a LPR scan succeeds.", 0, 100, 1);
-
-    private readonly UIMenuNumericScrollerItem<int> _scanIntervalItem =
-        new(
-            "Scan Interval (MS)", "How frequent cameras are polled.", 100, 5000, 100);
-
-    private readonly UIMenuNumericScrollerItem<int> _shotspotterPollRateItem =
-        new(
-            "Shotspotter Poll Rate (MS)", "How often Shotspotter polls for gunfire.", 1000, 120000, 500);
-
-    private readonly UIMenuNumericScrollerItem<int> _shotspotterChanceItem =
-        new(
-            "Shotspotter Chance", "Chance of a Shotspotter event per poll.", 0, 100, 1);
-
-    private readonly UIMenuNumericScrollerItem<int> _shotspotterFalseAlarmChanceItem =
-        new(
-            "False Alarm Chance", "Chance a Shotspotter call is bogus.", 0, 100, 1);
-
-    private readonly UIMenuNumericScrollerItem<int> _maxCamerasPerScanItem =
-        new(
-            "Max Cameras/Scan", "How many cameras are processed per cycle.", 1, 20, 1);
-
-    private readonly UIMenuCheckboxItem _debugModeItem =
-        new("Enable Debug Mode", false, "Enable verbose logging and debug info.");
-
-    private readonly UIMenuItem _saveSettingsItem =
-        new("Save Settings", "Save current settings to INI file.")
-        {
-            BackColor = Color.Green,
-            HighlightedBackColor = Color.DarkGreen
-        };
-
-    #endregion
 
     internal SettingsMenu()
     {
@@ -64,7 +27,7 @@ internal sealed class SettingsMenu
 
     internal void AttachTo(UIMenu parent, string label)
     {
-        var item = new UIMenuItem(label);
+        UIMenuItem item = new(label);
         parent.AddItem(item);
         parent.BindMenuToItem(Menu, parent.MenuItems[parent.MenuItems.Count - 1]);
     }
@@ -132,4 +95,42 @@ internal sealed class SettingsMenu
             Error(ex);
         }
     }
+
+    #region Settings items
+
+    private readonly UIMenuNumericScrollerItem<int> _readChanceItem =
+        new(
+            "Read Chance", "Chance a LPR scan succeeds.", 0, 100, 1);
+
+    private readonly UIMenuNumericScrollerItem<int> _scanIntervalItem =
+        new(
+            "Scan Interval (MS)", "How frequent cameras are polled.", 100, 5000, 100);
+
+    private readonly UIMenuNumericScrollerItem<int> _shotspotterPollRateItem =
+        new(
+            "Shotspotter Poll Rate (MS)", "How often Shotspotter polls for gunfire.", 1000, 120000, 500);
+
+    private readonly UIMenuNumericScrollerItem<int> _shotspotterChanceItem =
+        new(
+            "Shotspotter Chance", "Chance of a Shotspotter event per poll.", 0, 100, 1);
+
+    private readonly UIMenuNumericScrollerItem<int> _shotspotterFalseAlarmChanceItem =
+        new(
+            "False Alarm Chance", "Chance a Shotspotter call is bogus.", 0, 100, 1);
+
+    private readonly UIMenuNumericScrollerItem<int> _maxCamerasPerScanItem =
+        new(
+            "Max Cameras/Scan", "How many cameras are processed per cycle.", 1, 20, 1);
+
+    private readonly UIMenuCheckboxItem _debugModeItem =
+        new("Enable Debug Mode", false, "Enable verbose logging and debug info.");
+
+    private readonly UIMenuItem _saveSettingsItem =
+        new("Save Settings", "Save current settings to INI file.")
+        {
+            BackColor = Color.Green,
+            HighlightedBackColor = Color.DarkGreen
+        };
+
+    #endregion
 }

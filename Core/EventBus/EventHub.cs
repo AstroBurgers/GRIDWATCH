@@ -6,8 +6,8 @@ internal static class EventHub
 
     public static void Subscribe<T>(Action<T> handler)
     {
-        var type = typeof(T);
-        if (!Subscribers.TryGetValue(type, out var handlers))
+        Type type = typeof(T);
+        if (!Subscribers.TryGetValue(type, out List<Action<object>> handlers))
         {
             handlers = [];
             Subscribers[type] = handlers;
@@ -18,14 +18,12 @@ internal static class EventHub
 
     public static void Publish<T>(T eventData)
     {
-        var type = typeof(T);
-        if (!Subscribers.TryGetValue(type, out var handlers))
+        Type type = typeof(T);
+        if (!Subscribers.TryGetValue(type, out List<Action<object>> handlers))
             return;
 
         // Dispatch asynchronously via GameFiber to avoid frame hitching
-        foreach (var handler in handlers)
-        {
+        foreach (Action<object> handler in handlers)
             GameFiberHandling.ActiveGameFibers.Add(GameFiber.StartNew(() => handler(eventData)));
-        }
     }
 }

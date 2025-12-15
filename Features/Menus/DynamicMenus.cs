@@ -1,6 +1,5 @@
 ﻿using GRIDWATCH.Features.Cameras;
 using GRIDWATCH.Features.Shotspotter;
-using RAGENativeUI;
 using RAGENativeUI.Elements;
 
 namespace GRIDWATCH.Features.Menus;
@@ -25,8 +24,8 @@ internal sealed class ShotspotterMenu() : DynamicDataMenu<GunfireIncident>("Shot
 {
     protected override UIMenuItem BuildItem(GunfireIncident incident)
     {
-        var desc = $"Time: {incident.Timestamp:MMM dd HH:mm:ss}\n" +
-                   $"Location: {World.GetStreetName(incident.Location)}";
+        string desc = $"Time: {incident.Timestamp:MMM dd HH:mm:ss}\n" +
+                      $"Location: {World.GetStreetName(incident.Location)}";
         return new UIMenuItem($"Incident at {incident.Timestamp:HH:mm:ss}", desc);
     }
 }

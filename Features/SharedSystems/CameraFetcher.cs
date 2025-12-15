@@ -16,21 +16,17 @@ internal static class CameraFetcher
     {
         try
         {
-            var all = World.GetAllEntities();
+            Entity[] all = World.GetAllEntities();
             WorldCameras.Clear();
 
-            foreach (var e in all)
-            {
+            foreach (Entity e in all)
                 if (Array.IndexOf(CameraProps, e.Model.Hash) != -1)
-                {
                     WorldCameras.Add(e);
-                }
-            }
-            
+
             Debug($"Fetched {WorldCameras.Count} cameras");
 
             // Randomize and pick up to the user configured max number of cameras
-            var randomCameras = WorldCameras.PickRandom(UserConfig.MaxCamerasPerScan).ToList();
+            List<Entity> randomCameras = WorldCameras.PickRandom(UserConfig.MaxCamerasPerScan).ToList();
 
             return randomCameras;
         }
@@ -45,13 +41,13 @@ internal static class CameraFetcher
     {
         try
         {
-            var all = World.GetAllEntities();
+            Entity[] all = World.GetAllEntities();
             Entity nearest = null;
             float nearestDistSq = float.MaxValue;
 
-            foreach (var e in all)
+            foreach (Entity e in all)
             {
-                uint h = (uint)e.Model.Hash;
+                uint h = e.Model.Hash;
 
                 // camera model check
                 for (int i = 0; i < CameraProps.Length; i++)

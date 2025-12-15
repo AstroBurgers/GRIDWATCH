@@ -1,5 +1,3 @@
-using static GRIDWATCH.Native.Extensions.VectorExtensions;
-
 namespace GRIDWATCH.Native.Extensions;
 
 internal static class EntityExtensions
@@ -8,7 +6,7 @@ internal static class EntityExtensions
     {
         Vector3 e1Pos = e1.Position;
         Vector3 e2Pos = e2.Position;
-        var distSqr = e1Pos.DistanceToSquared(e2Pos);
-        return  distSqr <= maxDistance * maxDistance;
+        float distSqr = e1Pos.DistanceToSquared(e2Pos);
+        return distSqr <= maxDistance * maxDistance;
     }
 }

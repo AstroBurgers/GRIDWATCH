@@ -9,34 +9,32 @@ internal class ScanManager : ISensor
 
     public void Tick(IEnumerable<Entity> cameras)
     {
-        var vehicles = World.GetAllVehicles();
+        Vehicle[] vehicles = World.GetAllVehicles();
 
-        foreach (var cam in cameras)
+        foreach (Entity cam in cameras)
+        foreach (Vehicle veh in vehicles)
         {
-            foreach (var veh in vehicles)
-            {
-                if (!veh.Exists() || ScannedVehicles.ContainsKey(veh))
-                    continue;
+            if (!veh.Exists() || ScannedVehicles.ContainsKey(veh))
+                continue;
 
-                if (!veh.IsNear(cam, 50f) || !HasEntityClearLosToEntity(cam, veh) || !veh.Driver.Exists())
-                    continue;
+            if (!veh.IsNear(cam, 50f) || !HasEntityClearLosToEntity(cam, veh) || !veh.Driver.Exists())
+                continue;
 
-                if (!ShouldReadPlate(veh))
-                    continue;
+            if (!ShouldReadPlate(veh))
+                continue;
 
-                ProcessPlate(cam, veh);
-                ScannedVehicles[veh] = Game.GameTime;
-            }
+            ProcessPlate(cam, veh);
+            ScannedVehicles[veh] = Game.GameTime;
         }
     }
 
     internal static void Cleanup()
     {
-        var toRemove = ScannedVehicles.Keys
+        List<Vehicle> toRemove = ScannedVehicles.Keys
             .Where(v => !v.Exists() || !v.IsDriveable)
             .ToList();
 
-        foreach (var v in toRemove)
+        foreach (Vehicle v in toRemove)
             ScannedVehicles.Remove(v);
     }
 }
