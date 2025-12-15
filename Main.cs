@@ -46,20 +46,23 @@ public class Main : Plugin
         SensorScheduler.Run();
         SpawnProcess.Start();
 
-        new VersionChecker(Assembly.GetExecutingAssembly()).OnCompleted += (_, e) =>
+        GameFiber.StartNew(() =>
         {
-            bool updateAvailable = e.UpdateAvailable;
-            Version latestVersion = e.LatestVersion;
+            new VersionChecker(Assembly.GetExecutingAssembly()).OnCompleted += (_, e) =>
+            {
+                bool updateAvailable = e.UpdateAvailable;
+                Version latestVersion = e.LatestVersion;
 
-            if (updateAvailable)
-                SharedMethods.DisplayGridwatchAlert(
-                    "GRIDWATCH",
-                    $"Plugin is ~r~out of to date~s~!\n" +
-                    $"Online Version: ~g~{latestVersion}~s~\n" +
-                    $"Installed version: ~y~{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}~s~\n" +
-                    $"Please update ~r~ASAP~s~!"
-                );
-        };
+                if (updateAvailable)
+                    SharedMethods.DisplayGridwatchAlert(
+                        "GRIDWATCH",
+                        $"Plugin is ~r~out of to date~s~!\n" +
+                        $"Online Version: ~g~{latestVersion}~s~\n" +
+                        $"Installed version: ~y~{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}~s~\n" +
+                        $"Please update ~r~ASAP~s~!"
+                    );
+            };
+        }, "GRIDWATCH Version Checker");
 
         Info("Plugin loaded successfully, scanning activated!");
         SharedMethods.DisplayGridwatchAlert(
