@@ -41,10 +41,10 @@ internal sealed class SettingsMenu
         Menu.AddItem(_shotspotterFalseAlarmChanceItem);
         Menu.AddItem(_maxCamerasPerScanItem);
         Menu.AddItem(_debugModeItem);
-        Menu.AddItem(_saveSettingsItem);
         Menu.AddItem(_enableBlips);
         Menu.AddItem(_trackingBlips);
         Menu.AddItem(_blipDurationItem);
+        Menu.AddItem(_saveSettingsItem);
     }
 
     private void LoadConfigValues()
@@ -113,7 +113,7 @@ internal sealed class SettingsMenu
 
     private readonly UIMenuNumericScrollerItem<int> _scanIntervalItem =
         new(
-            "Scan Interval (MS)", "How frequent cameras are polled.", 100, 5000, 100);
+            "Scan Interval (MS)", "How frequent cameras are polled.", 100, 50000, 100);
 
     private readonly UIMenuNumericScrollerItem<int> _shotspotterPollRateItem =
         new(
@@ -149,7 +149,7 @@ internal sealed class SettingsMenu
 
     private readonly UIMenuNumericScrollerItem<int> _blipDurationItem =
         new(
-            "Blip Duration (MS)", "How long camera blips last.", 1, 600000, 100);
+            "Blip Duration (MS)", "How long camera blips last.", 100, 600000, 100);
 
     #endregion
 }
