@@ -26,7 +26,7 @@ internal class VersionChecker
     internal VersionChecker(Assembly assembly)
     {
         if (!Uri.TryCreate(
-                "https://www.lcpdfr.com/applications/downloadsng/interface/api.php?do=checkForUpdates&fileId=44036&textOnly=1",
+                "https://www.lcpdfr.com/applications/downloadsng/interface/api.php?do=checkForUpdates&fileId=52720&textOnly=1",
                 UriKind.Absolute, out _apiUrl))
             throw new UriFormatException(nameof(_apiUrl));
 
