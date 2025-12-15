@@ -56,6 +56,7 @@ internal static class SharedMethods
             $"~b~Flags:~s~ {stolen}{bolo}{wanted}";
 
         LicensePlateHit plateHit = new(
+            vehicle,
             camera.Position,
             plate,
             make,

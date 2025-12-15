@@ -25,7 +25,7 @@ internal static class EventConsumers
                 ?.RealAreaName ?? "Unknown"}~s~");
 
         CreateTimedBlip(shot.Location, Color.OrangeRed, $"GRIDWATCH Alert: Shotspotter {shot.Timestamp}",
-            30000, BlipType.Shotspotter);
+            UserConfig.BlipDuration, BlipType.Shotspotter);
 
         GunfireIncidents.Add(shot);
         Events.GunfireIncidentAdded(shot);
@@ -39,7 +39,7 @@ internal static class EventConsumers
         );
 
         CreateTimedBlip(hit.Location, Color.Red, $"GRIDWATCH Alert: {hit.LicensePlate}",
-            30000, BlipType.ALPR);
+            UserConfig.BlipDuration, BlipType.ALPR, hit.Vehicle);
 
         AlprHits.Add(hit);
         Events.LicensePlateHitAdded(hit);

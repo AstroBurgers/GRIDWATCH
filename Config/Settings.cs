@@ -34,7 +34,7 @@ internal class Config
     [IniReflectorValue("General_Settings", defaultValue: true)]
     public bool EnableBlips;
 
-    [IniReflectorValue("General_Settings", defaultValue: true)]
+    [IniReflectorValue("General_Settings", defaultValue: 30000)]
     public int BlipDuration;
     
     [IniReflectorValue("General_Settings", defaultValue: true, description:"If true, blips will be smaller, and attached to the scanned vehicle, allowing for continuous tracking.")]

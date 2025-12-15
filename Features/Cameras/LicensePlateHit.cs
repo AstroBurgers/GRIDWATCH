@@ -11,6 +11,7 @@
 /// <param name="secondaryColor">The secondary color of the vehicle.</param>
 /// <param name="message">An additional message or note related to the license plate hit.</param>
 public readonly struct LicensePlateHit(
+    Vehicle vehicle,
     Vector3 location,
     string licensePlate,
     string make,
@@ -19,6 +20,11 @@ public readonly struct LicensePlateHit(
     string secondaryColor,
     string message)
 {
+    /// <summary>
+    ///     Original vehicle reference.
+    /// </summary>
+    public Vehicle Vehicle { get; } = vehicle;
+    
     /// <summary>
     ///     Gets the geographical location where the license plate was detected.
     /// </summary>
