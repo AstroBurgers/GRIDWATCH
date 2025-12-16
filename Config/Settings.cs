@@ -2,76 +2,87 @@
 
 namespace GRIDWATCH.Config;
 
+
 internal static class Settings
 {
-    private struct NumericLimit(int min, int max)
-    {
-        public readonly int Min = min;
-        public readonly int Max = max;
-    }
-    private static readonly Dictionary<string, NumericLimit> NumericLimits =
-        new()
-        {
-            { nameof(Config.ReadChance), new NumericLimit(0, 100) },
-            { nameof(Config.ScanInterval), new NumericLimit(100, 120000) },
-            { nameof(Config.ShotspotterPollRate), new NumericLimit(1000, 120000) },
-            { nameof(Config.ShotspotterChance), new NumericLimit(0, 100) },
-            { nameof(Config.ShotspotterFalseAlarmChance), new NumericLimit(0, 100) },
-            { nameof(Config.MaxCamerasPerScan), new NumericLimit(1, 20) },
-            { nameof(Config.BlipDuration), new NumericLimit(100, 120000) }
-        };
-    
-    internal static readonly Config UserConfig = new();
-    internal static IniReflector<Config> IniReflector = new("plugins/LSPDFR/GRIDWATCH.ini");
+	private struct NumericLimit(int min, int max)
+	{
+		public readonly int Min = min;
+		public readonly int Max = max;
+	}
 
-    internal static void IniFileSetup()
-    {
-        if (!File.Exists("plugins/LSPDFR/GRIDWATCH.ini")) File.Create("plugins/LSPDFR/GRIDWATCH.ini").Close();
+	private static readonly Dictionary<string, NumericLimit> NumericLimits =
+		new()
+		{
+			{ nameof(Config.ReadChance), new NumericLimit(0, 100) },
+			{ nameof(Config.ScanInterval), new NumericLimit(100, 120000) },
+			{ nameof(Config.ShotspotterPollRate), new NumericLimit(1000, 120000) },
+			{ nameof(Config.ShotspotterChance), new NumericLimit(0, 100) },
+			{ nameof(Config.ShotspotterFalseAlarmChance), new NumericLimit(0, 100) },
+			{ nameof(Config.MaxCamerasPerScan), new NumericLimit(1, 20) },
+			{ nameof(Config.BlipDuration), new NumericLimit(100, 120000) }
+		};
 
-        IniReflector.Read(UserConfig, true);
-        ValidateIniValues();
-    }
+	internal static readonly Config UserConfig = new();
 
-    private static void ValidateIniValues()
-    {
-        List<string> fixes = [];
-        Config config = UserConfig;
+	internal static readonly IniReflector<Config> IniReflector = new("plugins/LSPDFR/GRIDWATCH.ini");
 
-        foreach (KeyValuePair<string, NumericLimit> kvp in NumericLimits)
-        {
-            string propertyName = kvp.Key;
-            NumericLimit limit = kvp.Value;
+	internal static void IniFileSetup()
+	{
+		if (!File.Exists("plugins/LSPDFR/GRIDWATCH.ini"))
+			File.Create("plugins/LSPDFR/GRIDWATCH.ini").Close();
 
-            PropertyInfo prop = typeof(Config).GetProperty(propertyName);
-            if (prop == null || prop.PropertyType != typeof(int))
-                continue;
+		IniReflector.Read(UserConfig, true);
+		ValidateIniValues();
+	}
 
-            int currentValue = (int)prop.GetValue(config);
-            int clampedValue = MathHelper.Clamp(
-                currentValue,
-                limit.Min,
-                limit.Max
-            );
+	private static void ValidateIniValues()
+	{
+		List<string> fixes = [];
+		Config config = UserConfig;
 
-            if (currentValue == clampedValue)
-                continue;
+		foreach (KeyValuePair<string, NumericLimit> kvp in NumericLimits)
+		{
+			string fieldName = kvp.Key;
+			NumericLimit limit = kvp.Value;
 
-            prop.SetValue(config, clampedValue);
+			FieldInfo field = typeof(Config).GetField(fieldName);
+			if (field == null || field.FieldType != typeof(int))
+				continue;
 
-            fixes.Add($"{propertyName}: {currentValue} → {clampedValue}");
+			int currentValue = (int)field.GetValue(config);
+			int clampedValue = MathHelper.Clamp(
+				currentValue,
+				limit.Min,
+				limit.Max
+			);
 
-            Warn(
-                $"{propertyName} was out of range ({currentValue}), clamped to {clampedValue}"
-            );
-        }
+			if (currentValue == clampedValue)
+				continue;
 
-        if (fixes.Count == 0)
-            return;
+			// Fix in memory
+			field.SetValue(config, clampedValue);
 
-        string message = string.Join("~n~", fixes);
+			// Persist to INI
+			IniReflector.WriteSingle(fieldName, clampedValue);
 
-        SharedMethods.DisplayGridwatchAlert("Invalid Config Fixed", message);
-    }
+			fixes.Add(fieldName + ": " + currentValue + " → " + clampedValue);
+
+			Warn(
+				fieldName +
+				" was out of range (" +
+				currentValue +
+				"), clamped to " +
+				clampedValue
+			);
+		}
+
+		if (fixes.Count == 0)
+			return;
+
+		string message = string.Join("~n~", fixes);
+		SharedMethods.DisplayGridwatchAlert("Invalid Config Fixed", message);
+	}
 }
 
 internal class Config
