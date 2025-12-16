@@ -113,7 +113,7 @@ internal sealed class SettingsMenu
 
     private readonly UIMenuNumericScrollerItem<int> _scanIntervalItem =
         new(
-            "Scan Interval (MS)", "How frequent cameras are polled.", 100, 50000, 100);
+            "Scan Interval (MS)", "How frequent cameras are polled.", 100, 120000, 100);
 
     private readonly UIMenuNumericScrollerItem<int> _shotspotterPollRateItem =
         new(
@@ -134,13 +134,6 @@ internal sealed class SettingsMenu
     private readonly UIMenuCheckboxItem _debugModeItem =
         new("Enable Debug Mode", false, "Enable verbose logging and debug info.");
 
-    private readonly UIMenuItem _saveSettingsItem =
-        new("Save Settings", "Save current settings to INI file.")
-        {
-            BackColor = Color.Green,
-            HighlightedBackColor = Color.DarkGreen
-        };
-
     private readonly UIMenuCheckboxItem _enableBlips =
         new("Enable Blips", false, "Toggle camera blips on/off.");
 
@@ -149,7 +142,14 @@ internal sealed class SettingsMenu
 
     private readonly UIMenuNumericScrollerItem<int> _blipDurationItem =
         new(
-            "Blip Duration (MS)", "How long camera blips last.", 100, 600000, 100);
-
+            "Blip Duration (MS)", "How long camera blips last.", 100, 120000, 100);
+    
+    private readonly UIMenuItem _saveSettingsItem =
+        new("Save Settings", "Save current settings to INI file.")
+        {
+            BackColor = Color.Green,
+            HighlightedBackColor = Color.DarkGreen
+        };
+    
     #endregion
 }

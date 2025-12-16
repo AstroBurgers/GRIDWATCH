@@ -4,6 +4,23 @@ namespace GRIDWATCH.Config;
 
 internal static class Settings
 {
+    private struct NumericLimit(int min, int max)
+    {
+        public readonly int Min = min;
+        public readonly int Max = max;
+    }
+    private static readonly Dictionary<string, NumericLimit> NumericLimits =
+        new()
+        {
+            { nameof(Config.ReadChance), new NumericLimit(0, 100) },
+            { nameof(Config.ScanInterval), new NumericLimit(100, 120000) },
+            { nameof(Config.ShotspotterPollRate), new NumericLimit(1000, 120000) },
+            { nameof(Config.ShotspotterChance), new NumericLimit(0, 100) },
+            { nameof(Config.ShotspotterFalseAlarmChance), new NumericLimit(0, 100) },
+            { nameof(Config.MaxCamerasPerScan), new NumericLimit(1, 20) },
+            { nameof(Config.BlipDuration), new NumericLimit(100, 120000) }
+        };
+    
     internal static readonly Config UserConfig = new();
     internal static IniReflector<Config> IniReflector = new("plugins/LSPDFR/GRIDWATCH.ini");
 
@@ -17,12 +34,43 @@ internal static class Settings
 
     private static void ValidateIniValues()
     {
-        if (UserConfig.ReadChance <= 100) return;
-        Normal("Chance value was greater than 100, setting value to 100...");
-        UserConfig.ReadChance = 100;
-        Game.DisplayNotification("commonmenu", "mp_alerttriangle", "GRIDWATCH", "~b~By Astro",
-            "Chance value is ~r~over 100~w~!!");
-        Warn("Chance value set to 100");
+        List<string> fixes = [];
+        Config config = UserConfig;
+
+        foreach (KeyValuePair<string, NumericLimit> kvp in NumericLimits)
+        {
+            string propertyName = kvp.Key;
+            NumericLimit limit = kvp.Value;
+
+            PropertyInfo prop = typeof(Config).GetProperty(propertyName);
+            if (prop == null || prop.PropertyType != typeof(int))
+                continue;
+
+            int currentValue = (int)prop.GetValue(config);
+            int clampedValue = MathHelper.Clamp(
+                currentValue,
+                limit.Min,
+                limit.Max
+            );
+
+            if (currentValue == clampedValue)
+                continue;
+
+            prop.SetValue(config, clampedValue);
+
+            fixes.Add($"{propertyName}: {currentValue} → {clampedValue}");
+
+            Warn(
+                $"{propertyName} was out of range ({currentValue}), clamped to {clampedValue}"
+            );
+        }
+
+        if (fixes.Count == 0)
+            return;
+
+        string message = string.Join("~n~", fixes);
+
+        SharedMethods.DisplayGridwatchAlert("Invalid Config Fixed", message);
     }
 }
 
