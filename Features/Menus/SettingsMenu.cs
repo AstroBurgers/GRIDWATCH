@@ -113,7 +113,7 @@ internal sealed class SettingsMenu
 
     private readonly UIMenuNumericScrollerItem<int> _scanIntervalItem =
         new(
-            "Scan Interval (MS)", "How frequent cameras are polled.", 100, 120000, 100);
+            "Scan Interval (MS)", "How frequently cameras are polled.", 100, 120000, 100);
 
     private readonly UIMenuNumericScrollerItem<int> _shotspotterPollRateItem =
         new(
